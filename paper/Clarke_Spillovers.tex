@@ -1,0 +1,87 @@
+%********************************************************************************
+\documentclass{article}
+
+
+\usepackage{natbib}
+\bibliographystyle{abbrvnat}
+\bibpunct{(}{)}{;}{a}{,}{,}
+\usepackage{setspace}
+
+\setlength\parskip{0.25in}
+
+\title{Estimating Treatment Effects in the Presence of Spillovers\footnote{
+I thank Christopher Roth and participants in the Impact Evaluation Meeting
+at the Inter-American Development Bank for useful comments for this draft.
+Source code is available at \texttt{url}.}}
+\author{Damian Clarke\thanks{\texttt{damian.clarke@economics.ox.ac.uk}}}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We propose a method to estimate treatment effects in situations where the stable
+unit treatment value assumption is violated locally.  A flexible methodology is
+described to test for such spillovers, and to consistently estimate treatment 
+effects in their presence.  This methodology is applied---both parametrically and
+semi-parametrically---to an empirical example.
+\end{abstract}
+
+%********************************************************************************
+\section{Introduction}
+Natural experiments often rely on territorial borders to estimate treatment 
+effects.  These borders separate quasi-treatment from quasi-control groups with
+individuals in one area having access to a program\footnote{In this paper we will
+refer to the `treatment' as a program.  However, the results here hold without 
+loss of generality for other economic phenomena which are not necessarily 
+explicit programs (such as, for example, a change in the prevailing minimum wage)} 
+while those in another do not.  In cases such as these where geographic location 
+is used to motivate identification, the stable unit treatment value assumption 
+(SUTVA) is, either explicitly or implicitly, invoked.
+
+However, often territorial borders are porous.  Generally state, regional,
+municipal, and village boundaties can be easily, if not costlessly, crossed.
+Given this, researchers interested in using natural experiments in this way may
+be concerned that the effects of a program in a treatment cluster may spillover 
+into non-treatment clusters---at least locally.
+
+Such a situation is in clear violation of the SUTVA's need that the treatment
+status of any one unit must not affect the outcomes of any other unit.  In this 
+paper we propose a simple methodology to deal with such spillover effects.  We
+discuss how to test for local spillovers, and if such spillovers exist, how to 
+estimate unbiased treatment effects.  It is shown that this estimation requires
+a weaker condition than SUTVA: namely that SUTVA holds between \emph{some} units, 
+as determined by their distance from the treatment cluster.  We show how to 
+estimate treatment effects both parametrically and semi-parametrically, and then
+briefly apply this to an empirical example.
+
+
+Ideas: \citet{McIntosh2008}, \citet{Bairdetal2014}, \citet{AngelucciDiMaro2010} 
+Applications: \citet{AngelucciDeGiorgi2009}, \citet{Heckmanetal1998}, 
+\citet{MiguelKremer2004}
+Other: \citet{Imbens2004}
+
+%********************************************************************************
+%SATURATE
+\section{Methodology}
+Consider an outcome variable $y$, a binary treatment variable $T$, and a measure 
+$d$ referring to the distance between each unit of observation $i$ and its 
+nearest treatment cluster $c$.  In this general formulation we will assume (for 
+notational simplicity that the treatment effect can be identified using single
+differences, however in the empirical illustration in the following section
+will also show its application to a difference-in-differences setup.
+
+\section{A Spillover-Robust Double Differences Estimator}
+\subsection{Parametric Estimation and Testing}
+Formalise what is in the DPhil paper.
+
+\subsection{Semi-Parametric Estimation of a Treatment Effect}
+Robinson style back fit to get the coefficient on treatment (but not close).
+
+\section{An Empirical Illustration}
+\section{Conclusion}
+
+\bibliography{./biblio}
+
+\end{document}
