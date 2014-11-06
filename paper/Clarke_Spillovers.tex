@@ -12,9 +12,10 @@
 
 \title{Estimating Difference-in-Differences in the Presence of Spillovers\footnote{
 I thank participants in the Impact Evaluation Meeting at the Inter-American 
-Development Bank for useful comments on this draft. Source code is available 
-at https://github.com/damiancclarke/spillovers.  Affiliation:
-Faculty of Economics, The University of Oxford, Manor Road, Oxford. Contact email: 
+Development Bank for useful comments on this draft. Source code, including the
+Stata module \texttt{cdifdif} is available at 
+https://github.com/damiancclarke/spillovers.  Affiliation: Faculty of Economics, 
+The University of Oxford, Manor Road, Oxford. Contact email: 
 damian.clarke@economics.ox.ac.uk}}
 \author{Damian Clarke}
 
@@ -37,10 +38,15 @@ parametrically and semi-parametrically---to two empirical examples.
 \section{Introduction}
 Natural experiments often rely on territorial borders to estimate treatment 
 effects.  These borders separate quasi-treatment from quasi-control groups with
-individuals in one area having access to a program or treatment (hereafter 
-program) while those in another do not.  In cases such as these where geographic 
-location is used to motivate identification, the stable unit treatment value 
-assumption (SUTVA) is, either explicitly or implicitly, invoked.
+individuals in one area having access to a program or treatment while those in 
+another do not.  In cases such as these where geographic location is used to 
+motivate identification, the stable unit treatment value assumption (SUTVA) is, 
+either explicitly or implicitly, invoked.\footnote{The SUTVA has a long and 
+interesting history, under various guises. \citet{Cox1958} refers to ``no 
+interference between different units'', before \citet{Rubin1978} introduced the 
+concept of SUTVA (the name SUTVA did not appear until \citet{Rubin1980}.  Recent 
+work of \citet{Manski2013}, refers to this assumption as Individualistic 
+Treatment Response (ITR).}
 
 However, often territorial borders are porous.  Generally state, regional,
 municipal, and village boundaries can be easily, if not costlessly, crossed.
@@ -50,7 +56,7 @@ into non-treatment clusters---at least locally.
 
 Such a situation is in clear violation of the SUTVA's need that the treatment
 status of any one unit must not affect the outcomes of any other unit.  In this 
-paper we propose a simple methodology to deal with such spillover effects.  We
+paper we propose a methodology to deal with such spillover effects.  We
 discuss how to test for local spillovers, and if such spillovers exist, how to 
 estimate unbiased treatment effects.  It is shown that this estimation requires
 a weaker condition than SUTVA: namely that SUTVA holds between \emph{some} units, 
@@ -96,10 +102,10 @@ a component of variance process:
 \label{Seqn:COV}
 Y(i,t)=\delta(t) + \alpha D(i,t)+\eta(i)+\nu(i,t)
 \end{equation}
-where we follow \citet{Abadie2005} in using $\delta(t)$ to refer to a time-specific
-component, $\alpha$ as the impact of treatment, $\eta(i)$ a component specific
-to each individual, and $\nu(i,t)$ as a time-varying individual (mean zero) shock,
-then a sufficient condition for identification is:
+where $\delta(t)$ refers to a time-specific component, $\alpha$ as the impact of 
+treatment, $\eta(i)$ a component specific to each individual, and $\nu(i,t)$ as 
+a time-varying individual (mean zero) shock, then a sufficient condition for 
+identification (a complete derivation is provided by \citet{Abadie2005}) is:
 \begin{equation}
 \label{Seqn:ID}
 P(D(i,1)=1|\nu(i,t))=P(D(i,1)=1) \ \forall\ t\in\{0,1\}.
@@ -118,14 +124,14 @@ treatment effect:
 
 Assume now, however, that treatment is not precisely geographically bounded.  
 Specifically, imagine that those living in control areas `close to' treatment 
-areas themselves are able to access treatment, either partially or completely.
-Such a case allows for a case where individuals `defy' their treatment status, 
-by travelling or moving treated areas, or where spillovers from treatment
-areas is diffused through general equilibrium processes.  Define $R(i,t)$ where
+areas are able to access treatment, either partially or completely.  Such a 
+case allows for a case where individuals `defy' their treatment status, by 
+travelling or moving treated areas, or where spillovers from treatment areas 
+is diffused through general equilibrium processes.  Define $R(i,t)$ where
 \begin{equation}
  R(i,t) =
   \begin{cases}
-   1   & \text{if an individual lives close, but not in, a treatment area} \\
+   1   & \text{if an individual lives close to, but not in, a treatment area} \\
    0   & \text{otherwise} 
   \end{cases}
 \end{equation}
@@ -145,21 +151,69 @@ estimation now consists of (\ref{Seqn:ID}) and the following assumption:
 \label{Seqn:ID2}
 P(R(i,1)=1|\nu(i,t))=P(R(i,1)=1) \ \forall\ t\in\{0,1\}.
 \end{equation}
-This says that both treatment, and being close to treatment cannot depend upon
-individual-specific time-variant components. To see this, write (\ref{Seqn:COV2}), 
-adding and subtracting $E[\eta(i)|D(i,1),
+This requires that both treatment, and being close to treatment cannot depend 
+upon individual-specific time-variant components. To see this, write 
+(\ref{Seqn:COV2}), adding and subtracting $E[\eta(i)|D(i,1),
 R(i,1)]$:
 \begin{equation}
 \label{Seqn:addsub}
 Y(i,t)=\delta(t) + \alpha D(i,t)+\beta R(i,t)+E[\eta(i)|D(i,1),R(i,1)]+\varepsilon(i,t)
 \end{equation}
 where, following \citet{Abadie2005}, $\varepsilon(i,t)=\eta(i)-E[\eta(i)|D(i,1),R(i,1)]
-+\nu(i,t)$.  We can redefine $\delta(t)=\delta(0)+[\delta(1)-\delta(0)]t$, and 
-redefine $E[\eta(i)|D(i,1),R(i,1)]=E[\eta(i)|D(i,1)=0,R(i,1)=0]+(E[\eta(i)|D(i,1)=1,
-R(i,1)=0]-E[\eta(i)|D(i,1)=0,R(i,1)=0])D(i,1)+(E[\eta(i)|D(i,1)=0,R(i,1)=1]-E[\eta(i)|
-D(i,1)=0,R(i,1)=0])R(i,1)$.
++\nu(i,t)$.  We can write $\delta(t)=\delta(0)+[\delta(1)-\delta(0)]t$, and write
+$E[\eta(i)|D(i,1),R(i,1)]$ as the weighted sum of the expectation of the 
+individual-specific component $\eta(i)$ over treatment status and `close' status%
+\footnote{$E[\eta(i)|D(i,1),R(i,1)]=E[\eta(i)|D(i,1)=0,R(i,1)=0]+(E[\eta(i)|D(i,1)=1,
+R(i,1)=0]-E[\eta(i)|D(i,1)=0,R(i,1)=0])\cdot D(i,1)+(E[\eta(i)|D(i,1)=0,R(i,1)=1]-
+E[\eta(i)|D(i,1)=0,R(i,1)=0])\cdot R(i,1)$.}.  Finally define $\mu$ as 
+$\mu=E[\eta(i)|D(i,1)=0,R(i,1)=0]+\delta_0$, $\tau$ as $\tau=E[\eta(i)|D(i,1)=1,R(i,1)
+=0]-E[\eta(i)|D(i,1)=0,R(i,1)=0]$, $\gamma$ as $\gamma=E[\eta(i)|D(i,1)=0,R(i,1)=1]-
+E[\eta(i)|D(i,1)=0,R(i,1)=0]$ and $\delta$ as $\delta=\delta(1)-\delta(0)$.  Then 
+from the above and (\ref{Seqn:addsub})
+we have:
+\begin{equation}
+\label{Seqn:cDD}
+Y(i,t)=\mu+\tau D(i,1) + \gamma R(i,1) + \delta t + \alpha D(i,t) + \beta R(i,t) + 
+       \varepsilon(i,t).
+\end{equation}
+Notice that this equation now includes the typical DD fixed effects $\tau$ and $\delta$
+and the double difference term $\alpha$.  However it also includes `close' analogues
+$\gamma$ (an initial fixed effect), and $\beta$: the effect of being `close to' a 
+treatment area.
 
+From assumptions (\ref{Seqn:ID}) and (\ref{Seqn:ID2}) it holds that $E[(1,D(i,1),R(i,1),
+D(i,t),R(i,t))\cdot\varepsilon(i,t)]=0$, which implies that all parameters from
+(\ref{Seqn:cDD}) are consistently estimable by OLS.  Importantly, this includes
+consistent estimates of $\alpha$ and $\beta$: the effect of the program treatment 
+and spillover effects on outcome variable $Y(i,t)$.  Then, from (\ref{Seqn:cDD}),
+a our coefficients of interest $\alpha$ and $\beta$ are:
+\begin{equation}
+\label{Seqn:DDa}
+\begin{split}
+\alpha&=\{E[Y(i,1)|D(i,1)=1,R(i,1)=0]-E[Y(i,1)|D(i,1)=0,R(i,1)=0]\} \\
+      &-\{E[Y(i,0)|D(i,1)=1,R(i,1)=0]-E[Y(i,0)|D(i,1)=0,R(i,1)=0]\}, 
+\end{split}
+\end{equation}
+and 
+\begin{equation}
+\label{Seqn:DDb}
+\begin{split}
+\beta&=\{E[Y(i,1)|D(i,1)=0,R(i,1)=1]-E[Y(i,1)|D(i,1)=0,R(i,1)=0]\} \\
+      &-\{E[Y(i,0)|D(i,1)=0,R(i,1)=1]-E[Y(i,0)|D(i,1)=0,R(i,1)=0]\}. 
+\end{split}
+\end{equation}
+where the sample estimate of each parameter is generated by a least squares
+regression of (\ref{Seqn:cDD}) using a random sample of 
+\{Y(i,t), D(i,t), R(i,t): i=1, \ldots, N, t=0, 1\}.
+
+%********************************************************************************
 \section{A Spillover-Robust Double Differences Estimator}
+We are interested in estimation difference-in-difference parameters $\alpha$ and 
+$\beta$ from (\ref{Seqn:cDD}).  We will refer to these estimators respectively
+as the average treatment effect on the treated (ATT), and the average treatment
+effect on the close to treated (ATC).  Average treatment effects are cast in 
+terms of the \citet{Rubin1974} Causal Model.
+
 \subsection{Parametric Estimation and Testing}
 Formalise what is in the DPhil paper.
 
