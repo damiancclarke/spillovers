@@ -28,11 +28,14 @@ damian.clarke@economics.ox.ac.uk}}
 
 \begin{abstract}
 I propose a method for difference-in-differences (DD) estimation in situations 
-where the stable unit treatment value assumption is violated locally.  A flexible 
-methodology is described to test for such spillovers, and to consistently estimate 
-treatment effects in their presence.  This methodology is applied---both 
+where the stable unit treatment value assumption is violated locally. This is
+relevant for a wide variety of cases where spillovers may occur between quasi-%
+treatment and quasi-control areas in a (natural) experiment. A flexible 
+methodology is described to test for such spillovers, and to consistently 
+estimate treatment effects in their presence. This methodology is applied---both 
 parametrically and semi-parametrically---to two empirical examples.
 \end{abstract}
+\hspace{8mm} \emph{JEL codes}: C13, C21, J13, R23. \\
 
 \newpage
 \begin{spacing}{1.1}
@@ -79,12 +82,18 @@ in the given area, and in close-by quasi-control areas.  As a result, the
 spillover-robust DD estimator propsed here flexibly captures this effect, 
 correcting for any (local) spillover bias.
 
+This paper joins recent literature which aims to loosen the strong strucure 
+imposed by the SUTVA.  Perhaps most notably, it is an application of 
+\citeauthor{Manski2013}'s (2013) social interactions, focusing on the case
+where spillovers are restricted to areas local to treatment clusters.  However,
+unlike recent developments focusing on spillovers \emph{between} treated and 
+control units within a treatment cluster, \citep{McIntosh2008,Bairdetal2014,
+AngelucciDiMaro2010}, here we explicitly examine the effect of a policy crossing
+a treatment boundary.
 
-
-Ideas: \citet{McIntosh2008}, \citet{Bairdetal2014}, \citet{AngelucciDiMaro2010} 
 Applications: \citet{AngelucciDeGiorgi2009}, \citet{Heckmanetal1998}, 
 \citet{MiguelKremer2004}
-Other: \citet{Imbens2004}, \citet{Heckmanetal1998b}, \citet{Manski2013}
+Other: , \citet{Heckmanetal1998b}, 
 
 %********************************************************************************
 %SATURATE
@@ -128,8 +137,9 @@ Assume now, however, that treatment is not precisely geographically bounded.
 Specifically, imagine that those living in control areas `close to' treatment 
 areas are able to access treatment, either partially or completely.  Such a 
 case allows for a case where individuals `defy' their treatment status, by 
-travelling or moving treated areas, or where spillovers from treatment areas 
-is diffused through general equilibrium processes.  Define $R(i,t)$ where
+travelling or moving to treated areas, or where spillovers from treatment 
+areas is diffused through general equilibrium processes.  Define $R(i,t)$ 
+where:
 \begin{equation}
  R(i,t) =
   \begin{cases}
@@ -163,9 +173,9 @@ Y(i,t)=\delta(t) + \alpha D(i,t)+\beta R(i,t)+E[\eta(i)|D(i,1),R(i,1)]+\varepsil
 \end{equation}
 where, following \citet{Abadie2005}, $\varepsilon(i,t)=\eta(i)-E[\eta(i)|D(i,1),R(i,1)]
 +\nu(i,t)$.  We can write $\delta(t)=\delta(0)+[\delta(1)-\delta(0)]t$, and write
-$E[\eta(i)|D(i,1),R(i,1)]$ as the weighted sum of the expectation of the 
-individual-specific component $\eta(i)$ over treatment status and `close' status%
-\footnote{$E[\eta(i)|D(i,1),R(i,1)]=E[\eta(i)|D(i,1)=0,R(i,1)=0]+(E[\eta(i)|D(i,1)=1,
+$E[\eta(i)|D(i,1),R(i,1)]$ as the sum of the expectation of the individual-specific 
+component $\eta(i)$ over treatment status and `close' status\footnote{$E[\eta(i)|
+D(i,1),R(i,1)]=E[\eta(i)|D(i,1)=0,R(i,1)=0]+(E[\eta(i)|D(i,1)=1,
 R(i,1)=0]-E[\eta(i)|D(i,1)=0,R(i,1)=0])\cdot D(i,1)+(E[\eta(i)|D(i,1)=0,R(i,1)=1]-
 E[\eta(i)|D(i,1)=0,R(i,1)=0])\cdot R(i,1)$.}.  Finally define $\mu$ as 
 $\mu=E[\eta(i)|D(i,1)=0,R(i,1)=0]+\delta_0$, $\tau$ as $\tau=E[\eta(i)|D(i,1)=1,R(i,1)
@@ -222,27 +232,41 @@ $Y^0(i,t)$ if the person were not to receive treatment.  Our ATT and ATC are
 thus:
 \begin{eqnarray}
 \label{Seqn:estim}
-ATT=E[Y^1(i,1)-Y^0(i,1)|D(i)=1] \\
-ATC=E[Y^1(i,1)-Y^0(i,1)|R(i)=1] 
+ATT=E[Y^1(i,1)-Y^0(i,1)|D(i)=1]\  \\
+ATC=E[Y^1(i,1)-Y^0(i,1)|R(i)=1].
 \end{eqnarray}
+As is typical in the potential outcome literature, estimation is hindered by the
+reality that only one of $Y^1(i,t)$ or $Y^0(i,t)$ is observed for a given 
+individual $i$ at time $t$.  The realised outcome can thus be expressed as 
+$Y(i,t)=Y^0(i,t)\cdot (1-D(i,t))(1-R(i,t))+Y^1(i,t)\cdot D(i,t)+Y^1(i,t)\cdot 
+R(i,t)$, where, depending on an individual's time varying treatment and close
+status, we observe either $Y^0(i,t)$ (untreated) or $Y^1(i,t)$ (treated or 
+close).
 
+Thus, in order to be able to estimate the quantities of interest, we rely on
+averages 
 
 \begin{assumption}
-Parallel trends in treatment and control: \\
+\textbf{Parallel trends in treatment and control:} \\
 $E[Y^0(i,1)-Y^0(i,0)|D=1,R=0]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$
 \end{assumption}
 
 \begin{assumption}
-Parallel trends in close and control: \\
+\textbf{Parallel trends in close and control:} \\
 $E[Y^0(i,1)-Y^0(i,0)|D=0,R=1]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$
 \end{assumption}
+where for notational simplicity $D$ and $R$ are used instead of the more 
+extensive $D(i,1)$ and $R(i,1)$.
 
 \begin{assumption}
-
+\textbf{SUTVA holds for some units:} \\
+There is some subset of individuals $j\in J$ of the total population $i\in N$ 
+for whom potential outcomes ($Y_j^0, Y_j^1$) are independent of the treatment 
+status $D=\{0,1\}\ \forall_{i\neq j} \in N$.
 \end{assumption}
 
 \begin{assumption}
-Violation of SUTVA are local: \\ 
+\textbf{Violations of SUTVA are observably local:} \\ 
 \end{assumption}
 
 
@@ -251,6 +275,7 @@ Formalise what is in the DPhil paper.
 
 \subsection{Semi-Parametric Estimation of a Treatment Effect}
 Robinson style back fit to get the coefficient on treatment (but not close).
+\citet{Imbens2004}
 
 \section{An Empirical Illustration: Spillovers and Contraceptive Reforms}
 Two cases of contraceptive reforms.
