@@ -53,14 +53,14 @@ bys id AgeGroup (year month): gen linear=_n
 ********************************************************************************
 destring id, replace
 
-areg birth `FE' `tr' `cont' Abortion if AgeGroup==1 `se', absorb(id)
+areg birth `FE' `tr' `cont' Abortion if AgeGroup==1, `se' absorb(id)
 outreg2 Abortion using "$OUT/AgeGroup1.tex", replace tex(pretty)
 local i=0
 local d=5
 foreach c of numlist 0(`d')45 {
 	gen close`i'=minDistDF>`c'&minDistDF<=`c'+`d'
 	tab close`i'
-	areg birth `FE' `tr' `cont' Abortion close* if AgeGroup==1 `se', absorb(id)
+	areg birth `FE' `tr' `cont' Abortion close* if AgeGroup==1, `se' absorb(id)
 	outreg2 Abortion close* using "$OUT/AgeGroup1.tex", append tex(pretty)
 	local ++i
 }
