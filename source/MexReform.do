@@ -13,6 +13,7 @@ vers 11
 clear all
 set more off
 cap log close
+set matsize 5000
 
 ********************************************************************************
 *** (1) Globals and Locals
@@ -22,10 +23,9 @@ global OUT "~/investigacion/2014/Spillovers/results/Mexico"
 global LOG "~/investigacion/2014/Spillovers/log"
 
 log using "$LOG/MexReform.txt", replace text
-
-local FE i.stateid i.year#i.month
-local tr i.stateid#c.linear
-local se cluster(stateid)
+local FE i.year#i.month
+local tr i.id#c.linear
+local se cluster(id)
 local cont medicalstaff MedMissing planteles* aulas* bibliotecas* totalinc /*
 */ totalout subsidies unemployment
 
@@ -42,7 +42,30 @@ drop if AgeGroup==.
 
 collapse `cont' Abortion (sum) birth, by(stateid munid year month AgeGroup)
 merge m:1 stateid munid using "$DAT/DistProcessed.dta"
+keep if _merge==3
+drop _merge
+
+egen id = concat(stateid munid)
+bys id AgeGroup (year month): gen linear=_n
 
 ********************************************************************************
 *** (3) Regressions
 ********************************************************************************
+destring id, replace
+
+areg birth `FE' `tr' `cont' Abortion if AgeGroup==1 `se', absorb(id)
+outreg2 Abortion using "$OUT/AgeGroup1.tex", replace tex(pretty)
+local i=0
+local d=5
+foreach c of numlist 0(`d')45 {
+	gen close`i'=minDistDF>`c'&minDistDF<=`c'+`d'
+	tab close`i'
+	areg birth `FE' `tr' `cont' Abortion close* if AgeGroup==1 `se', absorb(id)
+	outreg2 Abortion close* using "$OUT/AgeGroup1.tex", append tex(pretty)
+	local ++i
+}
+
+
+*areg birth `FE' `tr' `cont' Abortion if AgeGroup==2 `se', absorb(id)
+*areg birth `FE' `tr' `cont' Abortion if AgeGroup==3 `se', absorb(id)
+*areg birth `FE' `tr' `cont' Abortion if AgeGroup==4 `se', absorb(id)
