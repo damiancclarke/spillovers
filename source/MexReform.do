@@ -40,7 +40,7 @@ replace AgeGroup=3 if Age>=25&Age<=29
 replace AgeGroup=4 if Age>=30&Age<=39
 drop if AgeGroup==.
 
-collapse `cont' Abortion (sum) birth, by(stateid munid year month AgeGroup)
+collapse `cont' Abortion (sum) birth, by(stateid munid year AgeGroup)
 merge m:1 stateid munid using "$DAT/DistProcessed.dta"
 keep if _merge==3
 drop _merge
@@ -52,20 +52,19 @@ bys id AgeGroup (year month): gen linear=_n
 *** (3) Regressions
 ********************************************************************************
 destring id, replace
+local y birth
 
-areg birth `FE' `tr' `cont' Abortion if AgeGroup==1, `se' absorb(id)
-outreg2 Abortion using "$OUT/AgeGroup1.tex", replace tex(pretty)
-local i=0
-local d=5
-foreach c of numlist 0(`d')45 {
-	gen close`i'=minDistDF>`c'&minDistDF<=`c'+`d'
-	tab close`i'
-	areg birth `FE' `tr' `cont' Abortion close* if AgeGroup==1, `se' absorb(id)
-	outreg2 Abortion close* using "$OUT/AgeGroup1.tex", append tex(pretty)
-	local ++i
+foreach g of numlist 1(1)4 {
+	areg `y' `FE' `tr' `cont' Abortion if AgeGroup==`g', `se' absorb(id)
+	outreg2 Abortion using "$OUT/AgeGroup1.tex", replace tex(pretty)
+	local i=0
+	local d=5
+	foreach c of numlist 0(`d')45 {
+		gen close`i'=mindistDF>`c'&mindistDF<=`c'+`d'&year>=2009
+		tab close`i'
+		areg `y' `FE' `tr' `cont' Abortion close* if AgeGro==`g', `se' absorb(id)
+		outreg2 Abortion close* using "$OUT/AgeGroup1.tex", append tex(pretty)
+		local ++i
+	}
 }
 
-
-*areg birth `FE' `tr' `cont' Abortion if AgeGroup==2 `se', absorb(id)
-*areg birth `FE' `tr' `cont' Abortion if AgeGroup==3 `se', absorb(id)
-*areg birth `FE' `tr' `cont' Abortion if AgeGroup==4 `se', absorb(id)
