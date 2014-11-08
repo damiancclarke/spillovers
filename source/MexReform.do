@@ -33,7 +33,9 @@ local cont medicalstaff MedMissing planteles* aulas* bibliotecas* totalinc /*
 *** (2) Setup data
 ********************************************************************************
 use "$DAT/MunicipalBirths.dta"
-replace Abortion=1 if stateid=="09"&year==2008
+drop if year==2010
+replace Abortion=1 if statid=="09"&year==2008
+
 gen AgeGroup=.
 replace AgeGroup=1 if Age>=15&Age<=17
 replace AgeGroup=2 if Age>=18&Age<=24
@@ -49,14 +51,13 @@ drop _merge
 egen id = concat(stateid munid)
 bys id AgeGroup (year): gen linear=_n
 
-
 ********************************************************************************
 *** (3) Regressions
 ********************************************************************************
 destring id, replace
 local y birth
 
-foreach g of numlist 1 4 {
+foreach g of numlist 1(1)4 {
 	areg `y' `FE' `tr' `cont' Abortion if AgeGroup==`g', `se' absorb(id)
 	outreg2 Abortion using "$OUT/AgeGroup`g'.tex", replace tex(pretty)
 	local i=0
@@ -69,11 +70,30 @@ foreach g of numlist 1 4 {
 		local ++i
 	}
 	dis "Predicted effect for Abortion is:"
-	dis _b[Abortion]*3*16
+	dis _b[Abortion]*2*16
 	dis "Predicted effect for Close is:"
-	dis _b[close`g'_0]*3*4+_b[close`g'_1]*3*22
+	dis _b[close`g'_0]*2*4+_b[close`g'_1]*2*22
 	dis "Predicted Total Effect"
-	dis (_b[Abortion]*16+_b[close`g'_0]*4+_b[close`g'_1]*22)*3
-
+	dis (_b[Abortion]*16+_b[close`g'_0]*4+_b[close`g'_1]*22)*2
 }
 
+
+********************************************************************************
+*** (4) Descriptives
+********************************************************************************
+gen Treat=0
+replace Treat=1 if mindistDF>0&mindistDF<30
+replace Treat=2 if mindistDF==0
+preserve
+collapse (sum) birth, by(year Treat AgeGroup)
+label var birth "Number of Births"
+foreach a of numlist 1(1)4 {
+	twoway line birth year if Treat==0&AgeGroup==`a', yaxis(1)                ///
+	  ||   line birth year if Treat==1&AgeGroup==`a', yaxis(2) lpattern(dash) ///
+	  ||   line birth year if Treat==2&AgeG==`a', yaxis(2) lpattern(longdash) ///
+	  xline(2007.3, lpat(dash)) xline(2008) scheme(s1mono) xtitle("Year")     ///
+	  legend(label(1 "Control") label(2 "Close") label(3 "Treatment"))
+	graph export "$OUT/BirthTrends`a'.eps", as(eps) replace
+}
+
+restore
