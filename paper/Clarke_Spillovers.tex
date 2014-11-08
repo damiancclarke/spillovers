@@ -245,19 +245,27 @@ close).
 
 Thus, in order to be able to estimate the quantities of interest, we rely on
 averages over the entire population, rather than average of individual 
-treatment effects.  
+treatment effects.  As is typical in difference-in-differences estimation,
+consistent estimation requires parallel trends assumptions.  In the case of
+treatment \emph{and} local spillovers, this relies on:
 
 \begin{assumption}
+\label{Sass:PT}
 \textbf{Parallel trends in treatment and control:} \\
-$E[Y^0(i,1)-Y^0(i,0)|D=1,R=0]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$
+$E[Y^0(i,1)-Y^0(i,0)|D=1,R=0]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$,
+\end{assumption}
+\begin{assumption}
+\label{Sass:PTC}
+\textbf{Parallel trends in close and control:} \\
+$E[Y^0(i,1)-Y^0(i,0)|D=0,R=1]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$.
 \end{assumption}
 
-\begin{assumption}
-\textbf{Parallel trends in close and control:} \\
-$E[Y^0(i,1)-Y^0(i,0)|D=0,R=1]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$
-\end{assumption}
-where for notational simplicity $D$ and $R$ are used instead of the more 
-extensive $D(i,1)$ and $R(i,1)$.
+Here, for notational simplicity, $D$ and $R$ are used instead of the more 
+extensive $D(i,1)$ and $R(i,1)$.  In other words, assumption \ref{Sass:PT}
+and \ref{Sass:PTC} state that in the absence of treatment, the evolution
+of outcomes for treated units and for units close to treatment would have
+been parallel to the evolution of entirely untreated units.
+
 
 \begin{assumption}
 \textbf{SUTVA holds for some units:} \\
@@ -268,8 +276,9 @@ status $D=\{0,1\}\ \forall_{i\neq j} \in N$.
 
 \begin{assumption}
 \textbf{Violations of SUTVA are observably local:} \\ 
-For those individuals $i\notin J$ (ie for whom SUTVA does not hold), the assumption
-is violated due to observable spillovers $R^k$
+For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
+violated due to observable spillovers $R(i,t)$, where $R(i,t)=f(X^k,\theta)$
+is determined by some $k$-dimensional function of observable variables $X^k$.
 \end{assumption}
 
 

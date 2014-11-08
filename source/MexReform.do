@@ -33,6 +33,7 @@ local cont medicalstaff MedMissing planteles* aulas* bibliotecas* totalinc /*
 *** (2) Setup data
 ********************************************************************************
 use "$DAT/MunicipalBirths.dta"
+replace Abortion=1 if stateid=="09"&year==2008
 gen AgeGroup=.
 replace AgeGroup=1 if Age>=15&Age<=17
 replace AgeGroup=2 if Age>=18&Age<=24
@@ -48,23 +49,31 @@ drop _merge
 egen id = concat(stateid munid)
 bys id AgeGroup (year): gen linear=_n
 
+
 ********************************************************************************
 *** (3) Regressions
 ********************************************************************************
 destring id, replace
 local y birth
 
-foreach g of numlist 1(1)4 {
+foreach g of numlist 1 4 {
 	areg `y' `FE' `tr' `cont' Abortion if AgeGroup==`g', `se' absorb(id)
-	outreg2 Abortion using "$OUT/AgeGroup1.tex", replace tex(pretty)
+	outreg2 Abortion using "$OUT/AgeGroup`g'.tex", replace tex(pretty)
 	local i=0
 	local d=10
-	foreach c of numlist 0(`d')60 {
-		gen close`g'_`i'=mindistDF>`c'&mindistDF<=`c'+`d'&year>=2009
+	foreach c of numlist 0(`d')50 {
+		gen close`g'_`i'=mindistDF>`c'&mindistDF<=`c'+`d'&year>=2008
 		tab close`g'_`i'
 		areg `y' `FE' `tr' `cont' Abortion close`g'* if AgeG==`g', `se' absorb(id)
 		outreg2 Abortion close* using "$OUT/AgeGroup`g'.tex", append tex(pretty)
 		local ++i
 	}
+	dis "Predicted effect for Abortion is:"
+	dis _b[Abortion]*3*16
+	dis "Predicted effect for Close is:"
+	dis _b[close`g'_0]*3*4+_b[close`g'_1]*3*22
+	dis "Predicted Total Effect"
+	dis (_b[Abortion]*16+_b[close`g'_0]*4+_b[close`g'_1]*22)*3
+
 }
 
