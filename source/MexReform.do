@@ -23,7 +23,7 @@ global OUT "~/investigacion/2014/Spillovers/results/Mexico"
 global LOG "~/investigacion/2014/Spillovers/log"
 
 log using "$LOG/MexReform.txt", replace text
-local FE i.year#i.month
+local FE i.year
 local tr i.id#c.linear
 local se cluster(id)
 local cont medicalstaff MedMissing planteles* aulas* bibliotecas* totalinc /*
@@ -46,7 +46,7 @@ keep if _merge==3
 drop _merge
 
 egen id = concat(stateid munid)
-bys id AgeGroup (year month): gen linear=_n
+bys id AgeGroup (year): gen linear=_n
 
 ********************************************************************************
 *** (3) Regressions
@@ -58,12 +58,12 @@ foreach g of numlist 1(1)4 {
 	areg `y' `FE' `tr' `cont' Abortion if AgeGroup==`g', `se' absorb(id)
 	outreg2 Abortion using "$OUT/AgeGroup1.tex", replace tex(pretty)
 	local i=0
-	local d=5
-	foreach c of numlist 0(`d')45 {
-		gen close`i'=mindistDF>`c'&mindistDF<=`c'+`d'&year>=2009
-		tab close`i'
-		areg `y' `FE' `tr' `cont' Abortion close* if AgeGro==`g', `se' absorb(id)
-		outreg2 Abortion close* using "$OUT/AgeGroup1.tex", append tex(pretty)
+	local d=10
+	foreach c of numlist 0(`d')60 {
+		gen close`g'_`i'=mindistDF>`c'&mindistDF<=`c'+`d'&year>=2009
+		tab close`g'_`i'
+		areg `y' `FE' `tr' `cont' Abortion close`g'* if AgeG==`g', `se' absorb(id)
+		outreg2 Abortion close* using "$OUT/AgeGroup`g'.tex", append tex(pretty)
 		local ++i
 	}
 }
