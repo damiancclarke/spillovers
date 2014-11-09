@@ -10,6 +10,8 @@
 \usepackage{amsthm}
 \newtheorem{assumption}{Assumption}
 \usepackage{booktabs}
+\usepackage{epsfig}
+\usepackage{epstopdf}
 \usepackage{graphics}
 
 \setlength\parskip{0.25in}
@@ -295,8 +297,13 @@ Robinson style back fit to get the coefficient on treatment (but not close).
 Two cases of contraceptive reforms.
 \subsection{Abortion Reform in Mexico}
 \citet{ClarkeMuhlrad2014}
-
 \input{../tables/Headline.tex}
+
+
+\begin{figure}
+\includegraphics[scale=0.8]{../results/Mexico/CloseEstimate1.eps}
+\caption{Treatment and close to treatment effects: 15-19 year olds Mexico}
+\end{figure}
 
 \subsubsection{Running Additional Placebo Tests}
 Now there are at least two relevant placebo tests: pre reform between treat control
@@ -309,6 +316,21 @@ and pre-reform between close and non-close.
 \section{Conclusion}
 
 \bibliography{./biblio}
+\newpage
+\section{Appendices}
+\begin{figure}[htpb!]
+\includegraphics[scale=0.8]{../results/Mexico/CloseEstimate2.eps}
+\caption{Treatment and close to treatment effects: 20-24 year olds Mexico}
+\end{figure}
+\begin{figure}[htpb!]
+\includegraphics[scale=0.8]{../results/Mexico/CloseEstimate3.eps}
+\caption{Treatment and close to treatment effects: 25-29 year olds Mexico}
+\end{figure}
+\begin{figure}[htpb!]
+\includegraphics[scale=0.8]{../results/Mexico/CloseEstimate4.eps}
+\caption{Treatment and close to treatment effects: 30-39 year olds Mexico}
+\end{figure}
+
 
 \end{spacing}
 \end{document}
