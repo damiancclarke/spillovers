@@ -2,6 +2,7 @@
 \documentclass{article}
 
 
+\usepackage{appendix}
 \usepackage{natbib}
 \bibliographystyle{abbrvnat}
 \bibpunct{(}{)}{;}{a}{,}{,}
@@ -9,6 +10,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \newtheorem{assumption}{Assumption}
+\newtheorem{proposition}{Proposition}
 \usepackage{booktabs}
 \usepackage{epsfig}
 \usepackage{epstopdf}
@@ -53,8 +55,8 @@ motivate identification, the stable unit treatment value assumption (SUTVA) is,
 either explicitly or implicitly, invoked.\footnote{The SUTVA has a long and 
 interesting history, under various guises. \citet{Cox1958} refers to ``no 
 interference between different units'', before \citet{Rubin1978} introduced the 
-concept of SUTVA (the name SUTVA did not appear until \citet{Rubin1980}.  Recent 
-work of \citet{Manski2013}, refers to this assumption as Individualistic 
+concept of SUTVA (the name SUTVA did not appear until \citet{Rubin1980}).  
+Recent work of \citet{Manski2013}, refers to this assumption as Individualistic 
 Treatment Response (ITR).}
 
 However, often territorial borders are porous.  Generally state, regional,
@@ -75,29 +77,38 @@ propose a method to generalise the proposed estimator to a higher dimensional
 case where spillovers may depend, parametrically or non-parametrically, on a number 
 of factors.
 
-This methodology is then illustrated with 2 empirical examples.  We examine how
-spillovers of reforms across municipal boundaries may contaminate `traditional' 
-difference-in-differences (DD) estimators.  This is applied to two contraceptive
-reforms, where individuals from contiguous or nearby areas can travel to a 
-treatment region to access the reform.  It is shown that both the plausibly 
-exogenous arrival of the morning after pill to certain municipalities of Chile, 
-and abortion to certain districts in Mexico results in a reduction of births
-in the given area, and in close-by quasi-control areas.  As a result, the
-spillover-robust DD estimator propsed here flexibly captures this effect, 
-correcting for any (local) spillover bias.
+This methodology is then illustrated with a number of (large scale) empirical 
+examples.  We examine how spillovers of reforms across municipal boundaries may 
+contaminate `traditional' difference-in-differences (DD) estimators.  This is 
+applied to two contraceptive reforms, where individuals from contiguous or nearby 
+areas can travel to a treatment region to access the reform.  It is shown that 
+both the plausibly exogenous arrival of the morning after pill to certain 
+municipalities of Chile, and abortion to certain districts in Mexico results in 
+a reduction of births in the given area, and in close-by quasi-control areas.  
+As a result, the spillover-robust DD estimator propsed here flexibly captures 
+this effect, correcting for any (local) spillover bias which traditional DD
+fails to account for.
 
 This paper joins recent literature which aims to loosen the strong strucure 
-imposed by the SUTVA.  Perhaps most notably, it is an application of 
-\citeauthor{Manski2013}'s (2013) social interactions, focusing on the case
-where spillovers are restricted to areas local to treatment clusters.  However,
-unlike recent developments focusing on spillovers \emph{between} treated and 
-control units within a treatment cluster, \citep{McIntosh2008,Bairdetal2014,
-AngelucciDiMaro2010}, here we explicitly examine the effect of a policy crossing
-a treatment boundary.
+imposed by the SUTVA.  Perhaps most notably, it is (in broad terms) an 
+application of \citeauthor{Manski2013}'s (2013) social interactions framework, 
+focusing on the case where spillovers are restricted to areas local to treatment 
+clusters.  However, unlike recent developments focusing on spillovers 
+between treated and control units \emph{within} a treatment cluster (notable
+examples include \citet{McIntosh2008,Bairdetal2014,AngelucciDiMaro2010}), this 
+paper focuses on situations where entire clusters are treated, and the status
+of the \emph{cluster} may affect nearby non-treated clusters.  This is likely
+the case for quasi-experimental studies, where `experiments' are defined based
+on geographic boundaries, such as administrative political regions which set 
+different policies.\footnote{A very different case is that of (for example)
+PROGRESA/Oportunidades, where treatment clusters (ie localities or 
+\emph{localidades}) contained both treatment and control individuals, and the
+literature is concerned with spillovers between treatment and control individuals
+within this treatment cluster.}
 
-Applications: \citet{AngelucciDeGiorgi2009}, \citet{Heckmanetal1998}, 
-\citet{MiguelKremer2004}
-Other: , \citet{Heckmanetal1998b}, 
+\nocite{AngelucciDeGiorgi2009} \nocite{Heckmanetal1998}
+\nocite{MiguelKremer2004}
+ \nocite{Heckmanetal1998b}
 
 %********************************************************************************
 %SATURATE
@@ -268,41 +279,141 @@ Here, for notational simplicity, $D$ and $R$ are used instead of the more
 extensive $D(i,1)$ and $R(i,1)$.  In other words, assumption \ref{Sass:PT}
 and \ref{Sass:PTC} state that in the absence of treatment, the evolution
 of outcomes for treated units and for units close to treatment would have
-been parallel to the evolution of entirely untreated units.
+been parallel to the evolution of entirely untreated units.  This is the
+fundamental DD identifying assumption of parallel trends, generalised to
+hold for treatment \emph{and} close to treatment status.
 
-
+In order to consistently estimate any treatment effect, some form of the
+SUTVA is invoked.  This requires that each individual's treatment status does
+not affect each other individual's potential outcome.  Here, we loosen SUTVA.
+In the remainder of this article, it will be assumed that:
 \begin{assumption}
+\label{Sass:SUTVAs}
 \textbf{SUTVA holds for some units:} \\
 There is some subset of individuals $j\in J$ of the total population $i\in N$ 
 for whom potential outcomes ($Y_j^0, Y_j^1$) are independent of the treatment 
 status $D=\{0,1\}\ \forall_{i\neq j} \in N$.
 \end{assumption}
-
+\noindent Fundamentally, this assumption implies that SUTVA need not hold among 
+all units.  We allow SUTVA to be violated in a specific manner:
 \begin{assumption}
+\label{Sass:SUTVAl}
 \textbf{Violations of SUTVA are observably local:} \\ 
 For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
 violated due to observable spillovers $R(i,t)$, where $R(i,t)=f(X^k,\theta)$
 is determined by some $k$-dimensional function of observable variables $X^k$.
 \end{assumption}
+\vspace{-4mm}
+\noindent This restriction is quite general however.  It simply states that
+violations of SUTVA occur in an observable way.  For example, if SUTVA does
+not hold locally to the treatment area, assumption \ref{Sass:SUTVAl} implies
+that we are able to define what `local' is.  While this article focuses on
+geographic distance, these derivations do not imply that this must be the
+case.  The `close' indicator $R(i,t)$ could depend on a range of phenomena
+including euclidean space, ethnic distance, or interactions between measures
+such as these and economic variables.
+
+
+\begin{proposition}
+\label{Pass:ATT}
+Under assumptions \ref{Sass:PT} to \ref{Sass:SUTVAl}, the ATT and ATC can be 
+consistently estimated by least squares when controlling, parametrically or
+semi-parametrically, for $R(i,t)=f(X^k,\theta)$.
+\end{proposition}
 
 
 \subsection{Parametric Estimation and Testing}
-Formalise what is in the DPhil paper.
+Consider the case where we do not control for $R(i,t)$.  Thus our model reverts
+to the traditional DD model:
+\begin{equation}
+\label{Seqn:tDD}
+Y(i,t)=\mu+\tau D(i,1) + \delta t + \alpha D(i,t) +  \varepsilon(i,t).
+\end{equation}
+where now our control group for whom $D(i,1)=0$ are made up of two subgroups:
+those for whom $R(i,1)=1$ and those for whom $R(i,1)=0$.\footnote{Remember, given 
+that here we work with only two time periods, for all $N$, $D(i,0)=0$ and 
+$R(i,0)=0$.}
+
+Proportion is $J/N$ and $(N-J)/N$
 
 \subsection{Semi-Parametric Estimation of a Treatment Effect}
 Robinson style back fit to get the coefficient on treatment (but not close).
 \citet{Imbens2004}
 
+%********************************************************************************
 \section{An Empirical Illustration: Spillovers and Contraceptive Reforms}
-Two cases of contraceptive reforms.
+We consider two empirical examples to motivate spillover-robust DD estimation.
+We focus on two localised contraceptive reforms in different countries. The first
+is the legalisation of abortion in Mexico city in April of 2007, and the second
+the expansion of morning after pill availability in certain municipalities of 
+Chile in 2008.  Both reforms were sharp, resulting in a large jump in reported
+rates of contraceptive access, and arrived to only certain areas of the country.
+In both cases, the geographic location of the reform was defined by the nature
+of local municipal-level policies, resulting in seperate policies in different
+municipalities in the country.\footnote{We refer to geographic units in each case
+as municipalities.  In Mexico these are referred to as \emph{municipios}, or in 
+the case of Mexico City \emph{delegaciones} and are the level below the State 
+(there are 2,473 in total).  In Chile these are known as \emph{comunas}, (of 
+which there are 346) and are also the level below the state.}
+
+Contraceptive reform provides a useful test of a spillover-robust DD methodology.
+Firstly, the arrival is plausibly exogenous at the level of the treated woman.
+Secondly, the incentives to access contraceptives, especially post-coital 
+treatments such as the morning after pill and abortion is high.  Even if a woman
+is geographically excluded from a treatment municipality, given that the economic
+and psychic costs of an undesired birth are very high, considerable incentives
+will exist to travel to a treatment area from a non-treatment area to control
+fertility.  Thirdly, contraceptive information may also be important in
+determining contraceptive behaviour, and this information may travel through
+(local) friendship networks.
+
+Some further details regarding each reform are provided in the sections below.
+In each case we estimate traditional difference-in-differences parameters under
+the assumption that spillovers do not exist (and hence the SUTVA holds), and
+then augment these estimates with the estimator discussed in the previous
+sections.
+
 \subsection{Abortion Reform in Mexico}
-\citet{ClarkeMuhlrad2014}
+On April 24, 2007 Mexico City passed a law which which legalised abortion 
+under all circumstances in the first 12 weeks of pregnancy (see for example
+\citet{Fraser2014} for a discussion).  This was a radical change from previous 
+laws which outlawed abortion in all but the extreme circumstances of rape, 
+to save the mother's life, or in the case of fetal inviability.  This law was 
+\emph{only} passed in Mexico City (or \emph{Distrito Federal}), the 
+administrative capital, and a region of Mexico containing approximately 8\% 
+of the population.
+
+This reform has had an important effect on birth rates among all age groups,
+both according to administrative records, and to microeconometric estimates
+(\citet{ClarkeMuhlrad2014} provide introductory figures of the effect of the
+reform).  In this paper we examine only the effect of the reform on the total
+number of teenage births.  Basic statistics for other age-groups, which show 
+broadly similar patterns, are appended.  Full tables are available upon 
+request.
+
+Table \ref{Stab:headline} provides estimates of the effect of the reform on
+the total number of births by teenagers in treatment municipalities.  In 
+column (1) we estimate as specification similar to (\ref{Seqn:tDD}): the 
+traditional DD estimate which does not account for spillovers.\footnote{Rather 
+than estimating (\ref{Seqn:tDD}) precisely as written, we estimate a more 
+flexible specification including time varying controls, full time and
+municipality fixed effects, and municipal trends.  The intution however is
+similar.}
+
 \input{../tables/Headline.tex}
 
 
 \begin{figure}
 \includegraphics[scale=0.8]{../results/Mexico/CloseEstimate1.eps}
 \caption{Treatment and close to treatment effects: 15-19 year olds Mexico}
+\vspace{2mm}
+\begin{footnotesize}
+\textsc{Notes to figure}: Each point represents a treatment effect for the group
+living $d\in [0,50]$ km from the nearest treatment municipality.  As such, the
+point at 0 includes all municipalities to directly receive treatment (Mexico DF).
+Standard errors are clustered at the level of the municipality.  Dotted lines 
+display the 90\% confidence interval for all estimates.
+\end{footnotesize}
 \end{figure}
 
 \subsubsection{Running Additional Placebo Tests}
@@ -312,12 +423,57 @@ and pre-reform between close and non-close.
 \subsection{Emergency Contraceptive Reform in Chile}
 \citet{Clarke2014}
 
+\begin{figure}
+\includegraphics[scale=0.8]{../results/Chile/CloseEstimate1.eps}
+\caption{Treatment Effects: 15-19 year olds Chile}
+\vspace{2mm}
+\begin{footnotesize}
+\textsc{Notes to figure}: Each point represents a treatment effect on the treatment
+area, conditioning on close controls for $d\in [0,45]$ km from the nearest treatment 
+municipality.  As such, the point at 0 includes all municipalities with the exception
+of treatment municipalities in the control group.  Standard errors are clustered at 
+the level of the municipality.  Dotted lines display the 90\% confidence interval for 
+all estimates.
+\end{footnotesize}
+\end{figure}
+
 
 \section{Conclusion}
+Echoing \citet{Bertrandetal2004}, ``Differences-in-Differences (DD) estimation has 
+become an increasingly popular way to estimate causal relationships''.  It is 
+important to consider the assumptions underlying these estimators.  
+In this paper we examine how DD estimates perform when the stable unit treatment 
+value assumption does not hold locally.  Such a situation may be common in estimates 
+of the causal effect of policy where compliance is imperfect.  If policies entail a 
+benefit to recipients, and if recipients living `close to' treatment areas who are 
+themselves untreated can somehow cross regional boundaries to receive treatment, we 
+may be concerned, that locally at least, SUTVA is violated.
 
+In this paper we derive a set of conditions by which DD estimates can produce 
+unbiased estimates even in the absence of SUTVA between all units.  It is shown
+that under a weaker set of conditions, both the average effect on the treated
+and the average effect on the `close to treated' can be estimated in a DD-type
+framework.  It is suggested that in the absence of this correction for local 
+violations of SUTVA that (if spillovers actually \emph{do} occur) the true 
+effect of the policy is likely to be attenuated.  Finally, using two empirical 
+examples from recent contraceptive policy expansions, it is shown that this---at
+least in these cases---an important consideration for treatment effects, and
+effects on nearby neighbourhoods.
+
+
+\newpage
 \bibliography{./biblio}
 \newpage
-\section{Appendices}
+
+\appendix
+\section{Appendix Proofs}
+\emph{Proof of proposition \ref{Pass:ATT}}: Consider the regression model 
+$Y(i,t)=\mu+\tau D(i,1) + \gamma R(i,1) + \delta t + \alpha D(i,t) + \beta R(i,t) + 
+\varepsilon(i,t)$.
+
+
+
+\section{Appendix Figures}
 \begin{figure}[htpb!]
 \includegraphics[scale=0.8]{../results/Mexico/CloseEstimate2.eps}
 \caption{Treatment and close to treatment effects: 20-24 year olds Mexico}
