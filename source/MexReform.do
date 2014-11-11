@@ -33,8 +33,8 @@ local cont medicalstaff MedMissing planteles* aulas* bibliotecas* totalinc /*
 *** (2) Setup data
 ********************************************************************************
 use "$DAT/MunicipalBirths.dta"
-drop if year==2010
-replace Abortion=1 if statid=="09"&year==2008
+*drop if year==2010
+*replace Abortion=1 if stateid=="09"&year==2008
 
 gen AgeGroup=.
 replace AgeGroup=1 if Age>=15&Age<=17
@@ -56,17 +56,26 @@ bys id AgeGroup (year): gen linear=_n
 ********************************************************************************
 destring id, replace
 local y birth
+preserve
 
-foreach g of numlist 1(1)4 {
+keep if year<2008
+cap drop Abortion
+cap drop close*
+
+gen Abortion=mindistDF==0&year>2005
+dis "This is the placebo test:"
+
+foreach g of numlist 1 {
 	areg `y' `FE' `tr' `cont' Abortion if AgeGroup==`g', `se' absorb(id)
-	outreg2 Abortion using "$OUT/AgeGroup`g'.tex", replace tex(pretty)
+	outreg2 Abortion using "$OUT/PlaceboAgeGroupN`g'.tex", replace tex(pretty)
 	local i=0
 	local d=10
 	foreach c of numlist 0(`d')50 {
-		gen close`g'_`i'=mindistDF>`c'&mindistDF<=`c'+`d'&year>=2008
+		gen close`g'_`i'=mindistDF>`c'&mindistDF<=`c'+`d'&year>=2005
 		tab close`g'_`i'
 		areg `y' `FE' `tr' `cont' Abortion close`g'* if AgeG==`g', `se' absorb(id)
-		outreg2 Abortion close* using "$OUT/AgeGroup`g'.tex", append tex(pretty)
+		outreg2 Abortion close* using "$OUT/PlaceboAgeGroupN`g'.tex", append /*
+		*/ tex(pretty)
 		local ++i
 	}
 	dis "Predicted effect for Abortion is:"
@@ -77,7 +86,31 @@ foreach g of numlist 1(1)4 {
 	dis (_b[Abortion]*16+_b[close`g'_0]*4+_b[close`g'_1]*22)*2
 }
 
+restore
 
+exit
+
+foreach g of numlist 1(1)4 {
+	areg `y' `FE' `tr' `cont' Abortion if AgeGroup==`g', `se' absorb(id)
+	outreg2 Abortion using "$OUT/AgeGroupN`g'.tex", replace tex(pretty)
+	local i=0
+	local d=10
+	foreach c of numlist 0(`d')50 {
+		gen close`g'_`i'=mindistDF>`c'&mindistDF<=`c'+`d'&year>=2009
+		tab close`g'_`i'
+		areg `y' `FE' `tr' `cont' Abortion close`g'* if AgeG==`g', `se' absorb(id)
+		outreg2 Abortion close* using "$OUT/AgeGroupN`g'.tex", append tex(pretty)
+		local ++i
+	}
+	dis "Predicted effect for Abortion is:"
+	dis _b[Abortion]*2*16
+	dis "Predicted effect for Close is:"
+	dis _b[close`g'_0]*2*4+_b[close`g'_1]*2*22
+	dis "Predicted Total Effect"
+	dis (_b[Abortion]*16+_b[close`g'_0]*4+_b[close`g'_1]*22)*2
+}
+
+exit
 ********************************************************************************
 *** (4) Descriptives
 ********************************************************************************
