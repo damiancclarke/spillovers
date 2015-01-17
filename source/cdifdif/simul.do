@@ -99,10 +99,25 @@ svmat Close
 
 gen dist = (_n-1)*10 in 1/6
 
-line Treat1 Treat2 Treat3 dist
-graph export "$OUT/treatmentEffect.eps", as(eps) replace
+#delimit ;
+line Treat1 dist, lpattern("---") lcolor(gs10) ||
+line Treat2 dist, lpattern(solid) lcolor(gs0)  ||
+line Treat3 dist, lpattern("---") lcolor(gs10)
+scheme(s1mono) legend(order(1 2) label(1 "95% CI") label(2 "Point Estimate"))
+title("Treatment Effect with Spillovers")
+xtitle("Spillover Distance") ytitle("Estimated Treatment Effect");
+#delimit cr
 
-line Close1 Close2 Close3 dist if Close1!=.
+graph export "$OUT/treatmentEffect.eps", as(eps) replace 
+
+#delimit ;
+line Close1 dist if Close1!=., lpattern("---") lcolor(gs10) ||
+line Close2 dist if Close1!=., lpattern(solid) lcolor(gs0)  ||
+line Close3 dist if Close1!=., lpattern("---") lcolor(gs10)
+scheme(s1mono) legend(order(1 2) label(1 "95% CI") label(2 "Point Estimate"))
+title("Effect of Spillovers on Nearby Areas")
+xtitle("Spillover Distance") ytitle("Effect of Spillover");
+#delimit cr
 graph export "$OUT/spilloverEffect.eps", as(eps) replace
 
 drop Treat1 Treat2 Treat3
