@@ -37,10 +37,20 @@ gen postTreat = treatment==1&year>=2008
 gen postDist  = distance if year>=2008
 replace postDist = 0 if postDist==.
 
+********************************************************************************
+*** (2) Generate distance spillover
+********************************************************************************
+local bwidth=10
+
+foreach dist of numlist 0(10)40 {
+    local up=`dist'+`bwidth'
+    gen d`up'=postDist>`dist'&postDist<=`up'
+}   
+
 drop T D
 
 ********************************************************************************
-*** (2) Simulate dependent variable
+*** (3) Simulate dependent variable
 ********************************************************************************
 gen y = 5 + 1*y2005 + 2*y2006 + 3*y2007 + 4*y2008 + 5*y2009 + 10*postTreat /*
-*/ + 3*rnormal()
+*/ + 8*d10 + 6*d20 + 4*d30 + 2*d40 + 0*d50 + 3*rnormal()
