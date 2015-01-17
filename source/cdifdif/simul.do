@@ -15,6 +15,11 @@ set more off
 cap log close
 
 ********************************************************************************
+*** (0) Globals
+********************************************************************************
+global OUT "~/investigacion/2014/Spillovers/results/cdifdif"
+    
+********************************************************************************
 *** (1) Simulate independent variables
 ********************************************************************************
 set obs 12000
@@ -62,7 +67,7 @@ gen y = 5 + 1*y2005 + 2*y2006 + 3*y2007 + 4*y2008 + 5*y2009 + 10*postTreat /*
 reg y i.year
 
 mat def Treat=J(6,3,.)
-mat def Close=J(5,3,.)
+mat def Close=J(6,3,.)
 
 local ctrl1 postTreat
 local ctrl2 postTreat d10
@@ -79,10 +84,28 @@ foreach i of numlist 1/6 {
     mat Treat[`i',3]=_b[postTreat]+1.96*_se[postTreat]
 
     if `i'>1 {
-        local j    = `i'-1
-        local marg = `j'*10
-        mat Close[`j',1]=_b[d`marg']-1.96*_se[d`marg']
-        mat Close[`j',2]=_b[d`marg']
-        mat Close[`j',3]=_b[d`marg']+1.96*_se[d`marg']
+        local marg = (`i'-1)*10
+        mat Close[`i',1]=_b[d`marg']-1.96*_se[d`marg']
+        mat Close[`i',2]=_b[d`marg']
+        mat Close[`i',3]=_b[d`marg']+1.96*_se[d`marg']
     }
 }
+
+********************************************************************************
+*** (5) Graphs
+********************************************************************************
+svmat Treat
+svmat Close
+
+gen dist = (_n-1)*10 in 1/6
+
+line Treat1 Treat2 Treat3 dist
+graph export "$OUT/treatmentEffect.eps", as(eps) replace
+
+line Close1 Close2 Close3 dist if Close1!=.
+graph export "$OUT/spilloverEffect.eps", as(eps) replace
+
+drop Treat1 Treat2 Treat3
+drop Close1 Close2 Close3
+mat list Close
+mat list Treat
