@@ -10,20 +10,21 @@ program cdifdif, eclass
 vers 10.0
 
 #delimit ;
-	syntax varlist(min=2) [if] [in] [pweight fweight aweight iweight]
-	  ,
-	  close(varname)
-	  BANDWidth(real)
-	  [
-	  areg(varname)
-	  graph(varname)
-	  *
-	  ]
-	  ;
-   #delimit cr
-	*=============================================================================
-	*=== (0) Error capture
-	*=============================================================================
+syntax varlist(min=2) [if] [in] [pweight fweight aweight iweight],
+close(varname)
+BANDWidth(real)
+[
+ vce(passthru)
+ areg(varname)
+ graph(varname)
+ *
+]
+;
+#delimit cr
+
+*=============================================================================
+*=== (0) Error capture
+*=============================================================================
 
 
 end
