@@ -19,7 +19,7 @@ cap log close
 ********************************************************************************
 global OUT "~/investigacion/2014/Spillovers/results/cdifdif"
 
-
+local gra 0 
 ********************************************************************************
 *** (1) Simulate independent variables
 ********************************************************************************
@@ -95,6 +95,7 @@ foreach i of numlist 1/6 {
 ********************************************************************************
 *** (5) Graphs
 ********************************************************************************
+if `gra'==1 {
 svmat Treat
 svmat Close
 
@@ -125,9 +126,17 @@ drop Treat1 Treat2 Treat3
 drop Close1 Close2 Close3
 mat list Close
 mat list Treat
-
+}
 ********************************************************************************
 *** (6) cdifdif trials
 ********************************************************************************
 do cdifdif.ado
-cdifdif y treatment postTreat i.year, close(distance) bandw(2)
+
+gen cluster=.
+foreach num of numlist 1(1)100 {
+    local low =(`num'-1)*120+1
+    local high=(`num')*120
+    qui replace cluster=`num' in `low'/`high'
+}
+
+cdifdif y postTreat i.year, close(distance) bandw(10) timevar(year) tyear(2008)
