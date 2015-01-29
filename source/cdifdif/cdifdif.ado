@@ -7,7 +7,7 @@
 
 cap program drop cdifdif
 program cdifdif, eclass
-vers 10.0
+vers 11.0
 
 #delimit ;
   syntax varlist(min=2 fv ts) [if] [in] [pweight fweight aweight iweight],
@@ -30,21 +30,16 @@ local e111 "Error in initial model. Test this model and fix any errors"
 
 fvexpand `varlist'
 local varlist `r(varlist)'
-tokenize `varlist'
-local y `1'
-macro shift
-local x `*'
 
-dis "`x'"
 if "`areg'"=="" {
-    reg `y' `x',
+    qui reg `varlist',
     if _rc!=0 {
         dis as error "`e111'"
         exit 111
     }
 }
 else if "`areg'"!="" {
-    areg `varlist', absorb(`areg')
+    qui areg `varlist', absorb(`areg')
     if _rc!=0 {
         dis as error "`e111'"
         exit 111

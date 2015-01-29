@@ -15,10 +15,11 @@ set more off
 cap log close
 
 ********************************************************************************
-*** (0) Globals
+*** (0) Globals and locals
 ********************************************************************************
 global OUT "~/investigacion/2014/Spillovers/results/cdifdif"
-    
+
+
 ********************************************************************************
 *** (1) Simulate independent variables
 ********************************************************************************
@@ -124,3 +125,9 @@ drop Treat1 Treat2 Treat3
 drop Close1 Close2 Close3
 mat list Close
 mat list Treat
+
+********************************************************************************
+*** (6) cdifdif trials
+********************************************************************************
+do cdifdif.ado
+cdifdif y treatment postTreat i.year, close(distance) bandw(2)
