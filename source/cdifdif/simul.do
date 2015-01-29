@@ -139,4 +139,5 @@ foreach num of numlist 1(1)100 {
     qui replace cluster=`num' in `low'/`high'
 }
 
-cdifdif y postTreat i.year, close(distance) bandw(10) timevar(year) tyear(2008)
+cdifdif y postTreat i.year, close(distance) bandw(10) timevar(year) tyear(2008) /*
+*/ treatvar(postTreat)
