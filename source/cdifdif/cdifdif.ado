@@ -64,29 +64,38 @@ if `max'<`bandwidth' {
 *=============================================================================
 *=== (1) Iterative addition of spillover tests
 *=============================================================================
-local cond 1
-local j=1
+local tstat = 200
+local pval  = 0.01
+local j     = 1
 local itvars
 
 mat point = J(`maxbin',3,.)
 
-while `cond'==1 {
+
+dis "Distance ...  Coefficient on Close ... Treatment"
+while `tstat'>1.96|`pval'<0.1 {
     local d1 = (`j'-1)*`bandwidth'
     local d2 = `j'*`bandwidth'
     local vn = `=`d2''
  
     tempvar close`vn'
     gen `close`vn''=`close'>`d1'&`close'<=`d2'&`timevar'>=`tyear'
-    reg `varlist' `itvars' `close`vn'', `vce'   
+    qui reg `varlist' `itvars' `close`vn'', `vce'   
+    
+    dis "`d1'-`d2' ..." _b[`close`vn''] " ..." _b[`treatvar']
 
+    qui sureg (`varlist' `itvars' `close`vn'') (e2:`varlist' `itvars')
+    test `treatvar'=[e2]`treatvar'
+    local pval = `r(p)'
+    
     mat point[`j',1]=_b[`treatvar']-1.96*_se[`treatvar']
     mat point[`j',2]=_b[`treatvar']
     mat point[`j',3]=_b[`treatvar']+1.96*_se[`treatvar']
 
-
+    local tstat = abs(_b[`close`vn'']/_se[`close`vn''])
+    
     local itvars `itvars' `close`vn''
     local ++j
-    if `j'>10 local cond=0
 }
 
 mat list point
