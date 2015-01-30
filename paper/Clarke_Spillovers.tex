@@ -336,11 +336,29 @@ these and economic variables.
 \label{Pass:ATT}
 Under assumptions \ref{Sass:PT} to \ref{Sass:SUTVAl}, the ATT and ATC can be 
 consistently estimated by least squares when controlling, parametrically or
-semi-parametrically, for $R(i,t)=f(X^k,\theta)$.
+semi-parametrically, for $R(i,t)=\mathbf{1}_{X_i\geq d}$.
 \end{proposition}
 
 
-\subsection{Parametric Estimation and Testing}
+\subsection{Estimation of Treatment and Spillover Effects}
+From proposition \ref{Pass:ATT}, we can consistently estimate $\alpha$
+and $\beta$, our estimands of interest, with information on treatment
+status, and close to treatment status, along with outcomes $Y(i,t)$ at
+each point of time $t\in\{0,1\}$.  In a typical DD framework, we
+observe $Y(i,t)$ and $D(i,t)$, however, do not fully observe $R(i,t)$,
+and individual's close/non-close status.
+
+We do however, assume that $X_i$, the variable measuring `distance' to
+treatment is observed.  From assumption \ref{Sass:SUTVAl}, we could
+thus map $X_i$ to $R(i,t)$ using the indicator function, \emph{if} we
+know the scalar value $d$, which represents the threshold of what is
+considered `close to treatment'.  \emph{Ex ante}, in the absence some
+economic model, there is no reason to believe that $d$ will be
+observed by researchers.  In the remainder of this section we discuss
+how to determine $R(i,t)$ based on $X_i$, in the absence of a known
+value for $d$.
+
+
 Consider the case where we do not control for $R(i,t)$.  Thus our model reverts
 to the traditional DD model:
 \begin{equation}
