@@ -8,16 +8,29 @@
 \bibpunct{(}{)}{;}{a}{,}{,}
 \usepackage{setspace}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{amsthm}
 \newtheorem{assumption}{Assumption}
 \newtheorem{proposition}{Proposition}
 \usepackage{booktabs}
-\usepackage{color}
+\usepackage[usenames, dvipsnames]{color}
 \usepackage{epsfig}
 \usepackage{epstopdf}
 \usepackage{graphics}
+\usepackage{hyperref}
 
 \setlength\parskip{0.25in}
+
+
+\hypersetup{                                                                                                    
+    colorlinks=true,   
+    linkcolor=BlueViolet,
+    citecolor=BlueViolet,
+    filecolor=BlueViolet,
+    urlcolor=BlueViolet
+}  
+
+
 
 \title{Estimating Difference-in-Differences in the Presence of Spillovers\footnote{
 I thank participants in the Impact Evaluation Meeting at the Inter-American 
@@ -33,9 +46,6 @@ damian.clarke@economics.ox.ac.uk}}
 
 \maketitle
 
-\begin{center}
-{\Large\textsc{Draft}}
-\end{center}
 
 \begin{abstract}
 I propose a method for difference-in-differences (DD) estimation in situations 
@@ -119,7 +129,7 @@ within this treatment cluster.}
 %SATURATE
 \section{Methodology}
 Define $Y(i,t)$ as the outcome for individual $i$ and time $t$.  The population
-of interest is observed at 2 time periods, $t\in \{0,1\}$.  Assume that between
+of interest is observed at two time periods, $t\in \{0,1\}$. Assume that between
 $t=0$ and $t=1$, some fraction of the population is exposed to a 
 quasi-experimental treatment.  As per \citet{Abadie2005}, we will denote 
 treatment for individual $i$ in time $t$ as $D(i,t)$, where $D(i,1)=1$ implies 
@@ -304,20 +314,22 @@ status $D=\{0,1\}\ \forall_{i\neq j} \in N$.
 all units.  We allow SUTVA to be violated in a specific manner:
 \begin{assumption}
 \label{Sass:SUTVAl}
-\textbf{Violations of SUTVA are observably local:} \\ 
+\textbf{(A) Violations of SUTVA are observably local:} \\ 
 For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
-violated due to observable spillovers $R(i,t)$, where $R(i,t)=f(X^k,\theta)$
-is determined by some $k$-dimensional function of observable variables $X^k$.
+violated due to observable spillovers $R(i,t)$, where 
+$R(i,t)=\mathbf{1}_{X_i\geq d}$, with the indicator function $\mathbf{1}$
+depending upon the covariate $X$ exceeding some fixed, but unknown scalar $d$.
 \end{assumption}
 \vspace{-4mm}
 \noindent This restriction is quite general however.  It simply states that
 violations of SUTVA occur in an observable way.  For example, if SUTVA does
 not hold locally to the treatment area, assumption \ref{Sass:SUTVAl} implies
 that we are able to define what `local' is.  While this article focuses on
-geographic distance, these derivations do not imply that this must be the
-case.  The `close' indicator $R(i,t)$ could depend on a range of phenomena
-including euclidean space, ethnic distance, or interactions between measures
-such as these and economic variables.
+an $X_i$ representing geographic distance, these derivations do not imply that 
+this must be the case.  The `close' indicator $R(i,t)$ could depend on a range 
+of phenomena including euclidean space, ethnic distance, or, as we return to
+discuss in section \ref{Sscn:extend}, interactions between measures such as 
+these and economic variables.
 
 
 \begin{proposition}
@@ -557,6 +569,43 @@ lines display the 90\% confidence interval for all estimates.
 \end{footnotesize}
 \end{figure}
 
+
+\section{Extensions}
+\label{Sscn:extend}
+\subsection{Estimating with Multidimensional Spillovers}
+In order to allow for spillovers to depend upon a range of observable variables,
+we must generalise assumption \ref{Sass:SUTVAl}.  In order to do this, the
+following new terminology is introduced, following \citet{Zajonc2012}. An 
+assignment rule, $\delta$, maps units with covariates $\mathbf{X=x}$ to close
+assignment $r$:
+\[
+\delta: \mathcal{X} \rightarrow \{0,1\}.
+\]
+This leads to a treatment assignment set $\mathbb{T}$ defined as:
+\[
+\mathbb{T}\equiv \{ \mathbf{x}\in\mathcal{X}: \delta(\mathbf{x})=1 \}
+\]
+whose complement $\mathbb{T}^c$ is known as the control assignment
+set. Finally then, we can write the treatment assignment rule:
+\begin{equation}
+\delta(x)\equiv \mathbf{1}_{\mathbf{x}\in\mathbb{T}}.
+\end{equation}
+Having defined the treatment assignment rule, we can now generalise
+assumption \ref{Sass:SUTVAl}:
+
+\begin{assumption}
+\label{Sass:SUTVAlM}
+\textbf{(B) Violations of SUTVA are observably local:} \\ 
+For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
+violated due to observable spillovers $R(i,t)$, where 
+$R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$, with the indicator function 
+$\mathbf{1}$ now depending upon potentially multidimensional $\mathbf{X=x}$
+fulfilling the treatment assignment rule $\mathbb{T}$.
+\end{assumption}
+
+
+
+\subsection{Semi-Parametric Estimation of Treatment Effects}
 
 
 \section{Conclusion}
