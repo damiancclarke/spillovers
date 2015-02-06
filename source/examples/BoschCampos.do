@@ -56,14 +56,13 @@ merge m:1 oid using "$DAT/distMatrix"
 ********************************************************************************
 gen dist=.
 
-foreach y of numlist 2002(1)2008 {
+foreach y of numlist 2002(1)2011 {
     foreach q of numlist 1(1)4 {
         if `y'==2002&`q'!=4 exit
-        if `y'==2008&`q'>=3 exit
 
         dis "I am on year `y', quarter `q'"
         
-        qui gen takeup`y'_`q' = oid if Tbx==1&year==`y'&quarter==`q'
+        qui gen takeup`y'_`q' = oid if T==1&year==`y'&quarter==`q'
         qui levelsof takeup`y'_`q', local(muns)
         foreach mun of local muns {
             qui gen _MM`mun'=m`mun'
@@ -72,4 +71,12 @@ foreach y of numlist 2002(1)2008 {
         qui replace dist = dist`y'_`q' if year==`y'&quarter==`q'
         drop _MM* dist`y'_`q' takeup`y'_`q'
     }
+}
+
+********************************************************************************
+*** (3b) Calculate distance lags
+********************************************************************************
+forvalues j=4 8 to 16 {
+    qui bys cvemun (year quarter): gen dist`j'  = dist[_n-`j']
+    qui bys cvemun (year quarter): gen distL`j' = dist[_n+`j']
 }
