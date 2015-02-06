@@ -45,3 +45,12 @@ log using "$LOG/BoschCampos.txt", text replace
 *** (2) Merge municipal data into Bosch Campos-Vazquez final dataset
 ********************************************************************************
 use "$DAT/Reg_t"
+
+merge m:1 cvemun using "$DAT/Municipios"
+keep if _merge==3|_merge==1
+drop _merge
+merge m:1 oid using "$DAT/distMatrix"
+
+********************************************************************************
+*** (3) Calculate distance to nearest treatment municipality (v slow)
+********************************************************************************
