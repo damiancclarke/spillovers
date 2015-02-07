@@ -147,7 +147,9 @@ if `regs'==1 {
             mat ests[`j',1]=_b[`v']-1.96*_se[`v']
             mat ests[`j',2]=_b[`v']
             mat ests[`j',3]=_b[`v']+1.96*_se[`v']
+            local ++j
         }
+        local j=`j'-7
         foreach v in CloseL12_`d2' CloseL8_`d2' Close_`d2' Close4_`d2' Close8_`d2' /*
         */ Close12_`d2' Close16_`d2' {
             mat ests[`j',4]=_b[`v']-1.96*_se[`v']
@@ -164,7 +166,7 @@ if `regs'==1 {
 ********************************************************************************
 *** (6) Graphs
 ********************************************************************************
-matrix colnames ests = lbTreat bTreat ubTreat lbClose cClose ubClose
+matrix colnames ests = lbTreat bTreat ubTreat lbClose bClose ubClose
 svmat ests, names(col)
 
 gen lag=.
@@ -187,18 +189,19 @@ foreach n of numlist 1(7)29 {
 
 foreach l of numlist -4 -3 -2 -1 0 2 3 {
     #delimit ;
-    twoway line bTreat closeIt if lag==`l' ||
+    twoway line bTreat closeIt if lag==`l' ||                    
            line lbTreat closeIt if lag==`l', lpattern(dash) || 
            line ubTreat closeIt if lag==`l', lpattern(dash) scheme(s1mono)
        yline(0, lpattern(dot)) legend(order(1 "Point Estimate" 2 "95% CI"))
-       xtitle("Distance") ytitle("Effect SP on Employers" " ") xlabel(minmax);
+       xtitle("Distance") ytitle("Effect SP on Employers" " ");
     graph export "$OUT/MainEstimate_Lag`l'.eps", as(eps) replace;
 
-    twoway line bClose closeIt if lag==`l' ||
-           line lbClose closeIt if lag==`l', lpattern(dash) || 
-           line ubClose closeIt if lag==`l', lpattern(dash) scheme(s1mono)
-       yline(0, lpattern(dot)) legend(order(1 "Point Estimate" 2 "95% CI"))
-       xtitle("Distance") ytitle("Effect SP on Employers" " ") xlabel(minmax);
+    twoway line bClose closeIt if lag==`l' & bClose!=. ||
+           line lbClose closeIt if lag==`l'&lbClose!=., lpattern(dash) || 
+           line ubClose closeIt if lag==`l'&lbClose!=., lpattern(dash)
+    scheme(s1mono) yline(0, lpattern(dot)) xtitle("Distance") 
+    legend(order(1 "Point Estimate" 2 "95% CI"))
+    ytitle("Effect SP on Employers" " ");
     graph export "$OUT/CloseEstimate_Lag`l'.eps", as(eps) replace;
-    #delimit ;
+    #delimit cr
 }
