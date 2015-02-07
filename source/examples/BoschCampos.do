@@ -108,15 +108,28 @@ if `regs'==1 {
 
     **REPRODUCE BOSCH CAMPOS-VAZQUEZ REGRESSIONS
 
-    xi: xtreg p_t TbL12x TbL8x  Tbx Tb4x Tb8x Tb12x Tb16  log_pop x_t_* /*
+    xi: xtreg p_t TbL12x TbL8x Tbx Tb4x Tb8x Tb12x Tb16  log_pop x_t_* /*
     */ i.ent*mydate i.ent*mydate2 i.ent*mydate3 _Ix* [aw=pob2000], fe robust /*
     */ cluster(cvemun)
     outreg2 Tb* using "$OUT/EventStudyReg.xls", excel replace
 
+    mat ests = J(35,6,.)
+    local j=1
+    foreach v in TbL12x TbL8x Tbx Tb4x Tb8x Tb12x Tb16 {
+        mat ests[`j',1]=_b[`v']-1.96*_se[`v']
+        mat ests[`j',2]=_b[`v']
+        mat ests[`j',3]=_b[`v']+1.96*_se[`v']
+        local ++j
+    }
+
+    
     **TEST DISTANCE REGRESSION
-    local d1 0 5000 10000 15000 20000 25000
+    local d1 0 10000 20000 30000
     tokenize `d1'
-    foreach d2 of numlist 5000 10000 15000 20000 25000 30000 {
+
+    
+    foreach d2 of numlist 10000 20000 30000 40000 {
+        dis "distance between `1' and `d2'"
 
         gen Close_`d2'    = dist>`1'    & dist < `d2'
         gen Close4_`d2'   = dist4>`1'   & dist < `d2'
@@ -130,7 +143,62 @@ if `regs'==1 {
         */ TbL12x TbL8x Tbx Tb4x Tb8x Tb12x Tb16 Close* [aw=pob2000], fe robust    /*
         */ cluster(cvemun)
         outreg2 Tb* Close* using "$OUT/EventStudyReg.xls", excel append
+        foreach v in TbL12x TbL8x Tbx Tb4x Tb8x Tb12x Tb16 {
+            mat ests[`j',1]=_b[`v']-1.96*_se[`v']
+            mat ests[`j',2]=_b[`v']
+            mat ests[`j',3]=_b[`v']+1.96*_se[`v']
+        }
+        foreach v in CloseL12_`d2' CloseL8_`d2' Close_`d2' Close4_`d2' Close8_`d2' /*
+        */ Close12_`d2' Close16_`d2' {
+            mat ests[`j',4]=_b[`v']-1.96*_se[`v']
+            mat ests[`j',5]=_b[`v']
+            mat ests[`j',6]=_b[`v']+1.96*_se[`v']
+            local ++j
+        }        
         macro shift
     }
-    
+
+    mat list ests
+}
+
+********************************************************************************
+*** (6) Graphs
+********************************************************************************
+matrix colnames ests = lbTreat bTreat ubTreat lbClose cClose ubClose
+svmat ests, names(col)
+
+gen lag=.
+gen closeIt=0 in 1/7
+replace closeIt=10 in 8/14
+replace closeIt=20 in 15/21
+replace closeIt=30 in 22/28
+replace closeIt=40 in 29/35
+
+foreach n of numlist 1(7)29 {
+    replace lag=3  in `n'
+    replace lag=2  in `=`n'+1'
+    replace lag=0  in `=`n'+2'
+    replace lag=-1 in `=`n'+3'
+    replace lag=-2 in `=`n'+4'
+    replace lag=-3 in `=`n'+5'
+    replace lag=-4 in `=`n'+6'    
+}
+
+
+foreach l of numlist -4 -3 -2 -1 0 2 3 {
+    #delimit ;
+    twoway line bTreat closeIt if lag==`l' ||
+           line lbTreat closeIt if lag==`l', lpattern(dash) || 
+           line ubTreat closeIt if lag==`l', lpattern(dash) scheme(s1mono)
+       yline(0, lpattern(dot)) legend(order(1 "Point Estimate" 2 "95% CI"))
+       xtitle("Distance") ytitle("Effect SP on Employers" " ") xlabel(minmax);
+    graph export "$OUT/MainEstimate_Lag`l'.eps", as(eps) replace;
+
+    twoway line bClose closeIt if lag==`l' ||
+           line lbClose closeIt if lag==`l', lpattern(dash) || 
+           line ubClose closeIt if lag==`l', lpattern(dash) scheme(s1mono)
+       yline(0, lpattern(dot)) legend(order(1 "Point Estimate" 2 "95% CI"))
+       xtitle("Distance") ytitle("Effect SP on Employers" " ") xlabel(minmax);
+    graph export "$OUT/CloseEstimate_Lag`l'.eps", as(eps) replace;
+    #delimit ;
 }
