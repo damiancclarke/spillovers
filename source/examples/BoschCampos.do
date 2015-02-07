@@ -114,9 +114,9 @@ if `regs'==1 {
     outreg2 Tb* using "$OUT/EventStudyReg.xls", excel replace
 
     **TEST DISTANCE REGRESSION
-    local d1 0 2500 5000 7500 10000 12500 15000 20000 25000
+    local d1 0 5000 10000 15000 20000 25000
     tokenize `d1'
-    foreach d2 of numlist 2500 5000 7500 10000 12500 15000 20000 25000 27500 {
+    foreach d2 of numlist 5000 10000 15000 20000 25000 30000 {
 
         gen Close_`d2'    = dist>`1'    & dist < `d2'
         gen Close4_`d2'   = dist4>`1'   & dist < `d2'
@@ -130,6 +130,7 @@ if `regs'==1 {
         */ TbL12x TbL8x Tbx Tb4x Tb8x Tb12x Tb16 Close* [aw=pob2000], fe robust    /*
         */ cluster(cvemun)
         outreg2 Tb* Close* using "$OUT/EventStudyReg.xls", excel append
+        macro shift
     }
     
 }
