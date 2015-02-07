@@ -111,19 +111,25 @@ if `regs'==1 {
     xi: xtreg p_t TbL12x TbL8x  Tbx Tb4x Tb8x Tb12x Tb16  log_pop x_t_* /*
     */ i.ent*mydate i.ent*mydate2 i.ent*mydate3 _Ix* [aw=pob2000], fe robust /*
     */ cluster(cvemun)
+    outreg2 Tb* using "$OUT/EventStudyReg.xls", excel replace
 
     **TEST DISTANCE REGRESSION
-    gen Close    = dist>0    & dist < 10000
-    gen Close4   = dist4>0   & dist < 10000
-    gen Close8   = dist8>0   & dist < 10000
-    gen Close12  = dist12>0  & dist < 10000
-    gen Close16  = dist16>0  & dist < 10000
-    gen CloseL8  = distL8>0  & dist < 10000
-    gen CloseL12 = distL12>0 & dist < 10000
-    
-    xi: xtreg p_t  log_pop x_t_* i.ent*mydate i.ent*mydate2 i.ent*mydate3 _Ix* /*
-    */ TbL12x TbL8x Tbx Tb4x Tb8x Tb12x Tb16 Close* [aw=pob2000], fe robust    /*
-    */ cluster(cvemun)
+    local d1 0 2500 5000 7500 10000 12500 15000 20000 25000
+    tokenize `d1'
+    foreach d2 of numlist 2500 5000 7500 10000 12500 15000 20000 25000 27500 {
 
+        gen Close_`d2'    = dist>`1'    & dist < `d2'
+        gen Close4_`d2'   = dist4>`1'   & dist < `d2'
+        gen Close8_`d2'   = dist8>`1'   & dist < `d2'
+        gen Close12_`d2'  = dist12>`1'  & dist < `d2'
+        gen Close16_`d2'  = dist16>`1'  & dist < `d2'
+        gen CloseL8_`d2'  = distL8>`1'  & dist < `d2'
+        gen CloseL12_`d2' = distL12>`1' & dist < `d2'
+    
+        xi: xtreg p_t  log_pop x_t_* i.ent*mydate i.ent*mydate2 i.ent*mydate3 _Ix* /*
+        */ TbL12x TbL8x Tbx Tb4x Tb8x Tb12x Tb16 Close* [aw=pob2000], fe robust    /*
+        */ cluster(cvemun)
+        outreg2 Tb* Close* using "$OUT/EventStudyReg.xls", excel append
+    }
     
 }
