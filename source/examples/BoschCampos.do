@@ -41,9 +41,13 @@ global LOG "~/investigacion/2014/Spillovers/log"
 
 log using "$LOG/BoschCampos.txt", text replace
 
+local prep 0
+local regs 1
+
 ********************************************************************************
 *** (2) Merge municipal data into Bosch Campos-Vazquez final dataset
 ********************************************************************************
+if `prep'==1 {
 use "$DAT/Reg_t"
 
 merge m:1 cvemun using "$DAT/Municipios"
@@ -59,7 +63,8 @@ gen dist=.
 foreach y of numlist 2002(1)2011 {
     foreach q of numlist 1(1)4 {
         if `y'==2002&`q'!=4 exit
-
+        if `y'==2011&`q'==4 exit
+        
         dis "I am on year `y', quarter `q'"
         
         qui gen takeup`y'_`q' = oid if T==1&year==`y'&quarter==`q'
@@ -79,4 +84,46 @@ foreach y of numlist 2002(1)2011 {
 forvalues j=4 8 to 16 {
     qui bys cvemun (year quarter): gen dist`j'  = dist[_n-`j']
     qui bys cvemun (year quarter): gen distL`j' = dist[_n+`j']
+}
+replace distL12=0 if distL12==.
+replace distL8=0  if distL8 ==.
+replace distL4=0  if distL4 ==.
+
+
+********************************************************************************
+*** (4) Clean up, save
+********************************************************************************
+drop m1-m84 _merge
+
+lab dat "Bosch Campos (2014) data augmented to include data to treatment"
+save "$DAT/BoschCamposDistance", replace
+}
+
+
+********************************************************************************
+*** (5) Regressions
+********************************************************************************
+if `regs'==1 {
+    use "$DAT/BoschCamposDistance"
+
+    **REPRODUCE BOSCH CAMPOS-VAZQUEZ REGRESSIONS
+
+    xi: xtreg p_t TbL12x TbL8x  Tbx Tb4x Tb8x Tb12x Tb16  log_pop x_t_* /*
+    */ i.ent*mydate i.ent*mydate2 i.ent*mydate3 _Ix* [aw=pob2000], fe robust /*
+    */ cluster(cvemun)
+
+    **TEST DISTANCE REGRESSION
+    gen Close    = dist>0    & dist < 10000
+    gen Close4   = dist4>0   & dist < 10000
+    gen Close8   = dist8>0   & dist < 10000
+    gen Close12  = dist12>0  & dist < 10000
+    gen Close16  = dist16>0  & dist < 10000
+    gen CloseL8  = distL8>0  & dist < 10000
+    gen CloseL12 = distL12>0 & dist < 10000
+    
+    xi: xtreg p_t  log_pop x_t_* i.ent*mydate i.ent*mydate2 i.ent*mydate3 _Ix* /*
+    */ TbL12x TbL8x Tbx Tb4x Tb8x Tb12x Tb16 Close* [aw=pob2000], fe robust    /*
+    */ cluster(cvemun)
+
+    
 }
