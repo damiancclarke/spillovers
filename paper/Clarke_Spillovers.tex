@@ -10,7 +10,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amsthm}
-\newtheorem{assumption}{Assumption}
+%\newtheorem{assumption}{Assumption}
 \newtheorem{proposition}{Proposition}
 \usepackage{booktabs}
 \usepackage[usenames, dvipsnames]{color}
@@ -18,6 +18,7 @@
 \usepackage{epstopdf}
 \usepackage{graphics}
 \usepackage{hyperref}
+\usepackage{lscape}
 
 \setlength\parskip{0.25in}
 
@@ -29,6 +30,21 @@
     filecolor=BlueViolet,
     urlcolor=BlueViolet
 }  
+
+\newtheorem*{assumption*}{\assumptionnumber}
+\providecommand{\assumptionnumber}{}
+\makeatletter
+\newenvironment{assumption}[2]
+ {%
+  \renewcommand{\assumptionnumber}{Assumption #1{#2}}%
+  \begin{assumption*}%
+  \protected@edef\@currentlabel{#1}%
+ }
+ {%
+  \end{assumption*}
+ }
+\makeatother
+\newcommand{\asref}[2]{\ref{#1}{#2}}
 
 
 
@@ -280,12 +296,12 @@ treatment effects.  As is typical in difference-in-differences estimation,
 consistent estimation requires parallel trends assumptions.  In the case of
 treatment \emph{and} local spillovers, this relies on:
 
-\begin{assumption}
+\begin{assumption}{1}{}
 \label{Sass:PT}
 \textbf{Parallel trends in treatment and control:} \\
 $E[Y^0(i,1)-Y^0(i,0)|D=1,R=0]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$,
 \end{assumption}
-\begin{assumption}
+\begin{assumption}{2}{}
 \label{Sass:PTC}
 \textbf{Parallel trends in close and control:} \\
 $E[Y^0(i,1)-Y^0(i,0)|D=0,R=1]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$.
@@ -303,7 +319,7 @@ In order to consistently estimate any treatment effect, some form of the
 SUTVA is invoked.  This requires that each individual's treatment status does
 not affect each other individual's potential outcome.  Here, we loosen SUTVA.
 In the remainder of this article, it will be assumed that:
-\begin{assumption}
+\begin{assumption}{3}{}
 \label{Sass:SUTVAs}
 \textbf{SUTVA holds for some units:} \\
 There is some subset of individuals $j\in J$ of the total population $i\in N$ 
@@ -312,9 +328,9 @@ status $D=\{0,1\}\ \forall_{i\neq j} \in N$.
 \end{assumption}
 \noindent Fundamentally, this assumption implies that SUTVA need not hold among 
 all units.  We allow SUTVA to be violated in a specific manner:
-\begin{assumption}
+\begin{assumption}{4}{A}
 \label{Sass:SUTVAl}
-\textbf{(A) Violations of SUTVA are observably local:} \\ 
+\textbf{Violations of SUTVA are observably local:} \\ 
 For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
 violated due to observable spillovers $R(i,t)$, where 
 $R(i,t)=\mathbf{1}_{X_i\geq d}$, with the indicator function $\mathbf{1}$
@@ -334,7 +350,7 @@ these and economic variables.
 
 \begin{proposition}
 \label{Pass:ATT}
-Under assumptions \ref{Sass:PT} to \ref{Sass:SUTVAl}, the ATT and ATC can be 
+Under assumptions \ref{Sass:PT} to \asref{Sass:SUTVAl}{A}, the ATT and ATC can be 
 consistently estimated by least squares when controlling, parametrically or
 semi-parametrically, for $R(i,t)=\mathbf{1}_{X_i\geq d}$.
 \end{proposition}
@@ -611,15 +627,24 @@ set. Finally then, we can write the treatment assignment rule:
 Having defined the treatment assignment rule, we can now generalise
 assumption \ref{Sass:SUTVAl}:
 
-\begin{assumption}
+%\addtocounter{assumption}{-1}
+\begin{assumption}{4}{B}
 \label{Sass:SUTVAlM}
-\textbf{(B) Violations of SUTVA are observably local:} \\ 
+\textbf{Violations of SUTVA are observably local:} \\ 
 For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
 violated due to observable spillovers $R(i,t)$, where 
 $R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$, with the indicator function 
-$\mathbf{1}$ now depending upon potentially multidimensional $\mathbf{X=x}$
+$\mathbf{1}$ now depending upon potentially multidimensional
+$\mathbf{X=x}$
 fulfilling the treatment assignment rule $\mathbb{T}$.
 \end{assumption}
+
+\begin{proposition}
+\label{Pass:ATT}
+Under assumptions \ref{Sass:PT} to \asref{Sass:SUTVAlM}{B}, the ATT and ATC can be 
+consistently estimated by least squares when controlling, parametrically or
+semi-parametrically, for $R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$.
+\end{proposition}
 
 
 
@@ -686,6 +711,8 @@ $R(i,t)$ and $t$ gives $E(\hat\beta)=\beta=ATC$. $\qed$
 \caption{Treatment and close to treatment effects: 30-39 year olds Mexico}
 \end{figure}
 
+\section{Appendix Tables}
+\input{./Appendix.tex}
 
 \end{spacing}
 \end{document}
