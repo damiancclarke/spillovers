@@ -44,7 +44,7 @@
   \end{assumption*}
  }
 \makeatother
-\newcommand{\asref}[2]{\ref{#1}{#2}}
+\newcommand{\asref}[2]{\ref{#1}{\textcolor{BlueViolet}{#2}}}
 
 
 
@@ -339,7 +339,7 @@ depending upon the covariate $X$ exceeding some fixed, but unknown scalar $d$.
 \vspace{-4mm}
 \noindent This restriction is quite general however.  It simply states that
 violations of SUTVA occur in an observable way.  For example, if SUTVA does
-not hold locally to the treatment area, assumption \ref{Sass:SUTVAl} implies
+not hold locally to the treatment area, assumption \asref{Sass:SUTVAl}{A} implies
 that we are able to define what `local' is.  While this article focuses on
 an $X_i$ representing geographic distance, these derivations do not imply that 
 this must be the case.  The `close' indicator $R(i,t)$ could depend on a range 
@@ -365,7 +365,7 @@ observe $Y(i,t)$ and $D(i,t)$, however, do not fully observe $R(i,t)$,
 and individual's close/non-close status.
 
 We do however, assume that $X_i$, the variable measuring `distance' to
-treatment is observed.  From assumption \ref{Sass:SUTVAl}, we could
+treatment is observed.  From assumption \asref{Sass:SUTVAl}{A}, we could
 thus map $X_i$ to $R(i,t)$ using the indicator function, \emph{if} we
 know the scalar value $d$, which represents the threshold of what is
 considered `close to treatment'.  \emph{Ex ante}, in the absence some
@@ -640,7 +640,7 @@ fulfilling the treatment assignment rule $\mathbb{T}$.
 \end{assumption}
 
 \begin{proposition}
-\label{Pass:ATT}
+\label{Pass:ATTnonP}
 Under assumptions \ref{Sass:PT} to \asref{Sass:SUTVAlM}{B}, the ATT and ATC can be 
 consistently estimated by least squares when controlling, parametrically or
 semi-parametrically, for $R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$.
