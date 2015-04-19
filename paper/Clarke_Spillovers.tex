@@ -47,14 +47,21 @@
 \newcommand{\asref}[2]{\ref{#1}{\textcolor{BlueViolet}{#2}}}
 
 
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}[2]{\frac{\Cov[#1,#2]}{\Var[#1]}}
+
+
+
+
 
 \title{Estimating Difference-in-Differences in the Presence of Spillovers\footnote{
 I thank participants in the Impact Evaluation Meeting at the Inter-American 
 Development Bank for useful comments on this draft. Source code, including the
 Stata module \texttt{cdifdif} is available at 
-https://github.com/damiancclarke/spillovers.  Affiliation: Faculty of Economics, 
-The University of Oxford, Manor Road, Oxford. Contact email: 
-damian.clarke@economics.ox.ac.uk}}
+\href{https://github.com/damiancclarke/spillovers}{https://github.com/damiancclarke/spillovers}.  
+Affiliation: Faculty of Economics, The University of Oxford, Manor Road, 
+Oxford. Contact email: \href{mailto:damian.clarke@economics.ox.ac.uk}{damian.clarke@economics.ox.ac.uk}}}
 \author{Damian Clarke}
 
 
@@ -96,7 +103,7 @@ Given this, researchers interested in using natural experiments in this way may
 be concerned that the effects of a program in a treatment cluster may spillover 
 into non-treatment clusters---at least locally.
 
-Such a situation is in clear violation of the SUTVA's need that the treatment
+Such a situation is in clear violation of the SUTVA's requirement that the treatment
 status of any one unit must not affect the outcomes of any other unit.  In this 
 paper we propose a methodology to deal with such spillover effects.  We
 discuss how to test for local spillovers, and if such spillovers exist, how to 
@@ -116,9 +123,12 @@ for that individual, `distance' is defined very generally.  It is
 envisioned that this will allow for phenomena such as information
 flowing from treated to untreated areas, or of untreated individuals
 violating their treatment status by travelling from untreated to
-treated areas.  Similarly, this framework allows for local general
-equilibrium-type spillovers, where a tightly applied program may
-have an economic effect on nearby markets.
+treated areas.  In each case distance plays a clear role in the
+propogation of treatment; either information must travel out, or
+beneficiaries must travel in. Similarly, this framework allows for
+local general equilibrium-type spillovers, where a tightly applied
+program may have an economic effect on nearby markets, but where this
+effect disipates as distance to treatment increases.
 
 This methodology is then illustrated with a number of (large scale) empirical 
 examples.  We examine how spillovers of reforms across municipal boundaries may 
@@ -325,11 +335,14 @@ and \ref{Sass:PTC} state that in the absence of treatment, the evolution
 of outcomes for treated units and for units close to treatment would have
 been parallel to the evolution of entirely untreated units.  This is the
 fundamental DD identifying assumption of parallel trends, generalised to
-hold for treatment \emph{and} close to treatment status.
+hold for treatment \emph{and} close to treatment status.  Note that in
+the above, we no longer need to make \emph{any} assumptions regarding
+parallel trends between treatment and close to treatment units.
 
-In order to consistently estimate any treatment effect, some form of the
-SUTVA is invoked.  This requires that each individual's treatment status does
-not affect each other individual's potential outcome.  Here, we loosen SUTVA.
+However, as a matter of course, in order to consistently estimate any
+treatment effect, some form of the SUTVA must be invoked.  Typically,
+this requires that each individual's treatment status does not affect
+each other individual's potential outcome.  Here, we loosen SUTVA. 
 In the remainder of this article, it will be assumed that:
 \begin{assumption}{3}{}
 \label{Sass:SUTVAs}
@@ -345,7 +358,7 @@ all units.  We allow SUTVA to be violated in a specific manner:
 \textbf{Violations of SUTVA are observably local:} \\ 
 For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
 violated due to observable spillovers $R(i,t)$, where 
-$R(i,t)=\mathbf{1}_{X_i\geq d}$, with the indicator function $\mathbf{1}$
+$R(i,t)=\mathbf{1}_{X_i\leq d}$, with the indicator function $\mathbf{1}$
 depending upon the covariate $X$ exceeding some fixed, but unknown scalar $d$.
 \end{assumption}
 \vspace{-4mm}
@@ -355,16 +368,17 @@ not hold locally to the treatment area, assumption \asref{Sass:SUTVAl}{A} implie
 that we are able to define what `local' is.  While this article focuses on
 an $X_i$ representing geographic distance, these derivations do not imply that 
 this must be the case.  The `close' indicator $R(i,t)$ could depend on a range 
-of phenomena including euclidean space, ethnic distance, or, as we return to
-discuss in section \ref{Sscn:extend}, interactions between measures such as 
-these and economic variables.
+of phenomena including euclidean space, ethnic distance, edges between
+nodes in a network, or, as we return to discuss in section
+\ref{Sscn:extend}, interactions between measures such as  these and
+economic variables. 
 
 
 \begin{proposition}
 \label{Pass:ATT}
 Under assumptions \ref{Sass:PT} to \asref{Sass:SUTVAl}{A}, the ATT and ATC can be 
 consistently estimated by least squares when controlling, parametrically or
-semi-parametrically, for $R(i,t)=\mathbf{1}_{X_i\geq d}$.
+semi-parametrically, for $R(i,t)=\mathbf{1}_{X_i\leq d}$.
 \end{proposition}
 
 
@@ -374,7 +388,7 @@ and $\beta$, our estimands of interest, with information on treatment
 status, and close to treatment status, along with outcomes $Y(i,t)$ at
 each point of time $t\in\{0,1\}$.  In a typical DD framework, we
 observe $Y(i,t)$ and $D(i,t)$, however, do not fully observe $R(i,t)$,
-and individual's close/non-close status.
+an individual's close/non-close status.
 
 We do however, assume that $X_i$, the variable measuring `distance' to
 treatment is observed.  From assumption \asref{Sass:SUTVAl}{A}, we could
@@ -386,22 +400,53 @@ observed by researchers.  In the remainder of this section we discuss
 how to determine $R(i,t)$ based on $X_i$, in the absence of a known
 value for $d$.
 
-We follow \citet{PorterYu2014} in treating the cutoff point $d$ as a
-nuisance parameter which must be estimated.
-
-Consider the case where we do not control for $R(i,t)$.  Thus our model reverts
-to the traditional DD model:
+In order to do so, we re-write (\ref{Seqn:cDD}) as:
 \begin{equation}
-\label{Seqn:tDD}
-Y(i,t)=\mu+\tau D(i,1) + \delta t + \alpha D(i,t) +  \varepsilon(i,t).
+\label{Seqn:cDDconc}
+\tilde{Y}(i,t)=\mu + \alpha D(i,t) + \upsilon(i,t).
 \end{equation}
-where now our control group for whom $D(i,1)=0$ are made up of two subgroups:
-those for whom $R(i,1)=1$ and those for whom $R(i,1)=0$.\footnote{Remember, given 
-that here we work with only two time periods, for all $N$, $D(i,0)=0$ and 
-$R(i,0)=0$.}
+where $\upsilon(i,t)=\beta R(i,t)+\varepsilon(i,t)$, and for ease of notation
+the fixed effects $D(i,1), R(i,1)$ and $t$ have been concentrated out to form
+$\tilde{Y}(i,t)$.  If we were to estimate $\hat\alpha$ from the above regression
+ignoring the potential presence of spillovers, then we have that the 
+expectation of $\hat\alpha$ is:
+\begin{eqnarray}
+\label{Seqn:alphaExp}
+E[\hat\alpha] &=& \alpha + \beta\Bias{D(i,t)}{R(i,t)}+\Bias{D(i,t)}{\varepsilon(i,t)} \nonumber \\ 
+              &=& \alpha + \beta\Bias{D(i,t)}{R(i,t)},
+\end{eqnarray}
+where the second line comes from assumption (\ref{Seqn:ID}).  So far we have
+attached no functional form to $R(i,t)$.  Define $R(i,t)$ as:
+\begin{equation}
+R(i,t) = \beta_1R^1(i,t)+\beta_2R^2(i,t)+ \cdots + \beta_JR^J(i,t)
+\end{equation}  
+where:
+\begin{equation}
+ R^j(i,t) =
+  \begin{cases}
+   1   & \text{if\ \ } X_i\geq(j-1)c \text{\ \ and \ } X_i<jc \\
+   0   & \text{otherwise} 
+  \end{cases}\ \ \ \ \ \forall j \in (1,2,\ldots,J)
+\end{equation}
 
-\textcolor{red}{3.1 and 3.2: TBC.  Remaining sections are complete.}
-%Proportion is $J/N$ and $(N-J)/N$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+%We follow \citet{PorterYu2014} in treating the cutoff point $d$ as a
+%nuisance parameter which must be estimated.
+
 
 \subsection{Semi-Parametric Estimation of a Treatment Effect}
 Robinson style back fit to get the coefficient on treatment (but not close).
@@ -622,7 +667,7 @@ lines display the 90\% confidence interval for all estimates.
 \label{Sscn:extend}
 \subsection{Estimating with Multidimensional Spillovers}
 In order to allow for spillovers to depend upon a range of observable variables,
-we must generalise assumption \ref{Sass:SUTVAl}.  In order to do this, the
+we must generalise assumption \asref{Sass:SUTVAl}{A}.  In order to do this, the
 following new terminology is introduced, following \citet{Zajonc2012}. An 
 assignment rule, $\delta$, maps units with covariates $\mathbf{X=x}$ to close
 assignment $r$:
@@ -638,8 +683,8 @@ set. Finally then, we can write the treatment assignment rule:
 \begin{equation}
 \delta(x)\equiv \mathbf{1}_{\mathbf{x}\in\mathbb{T}}.
 \end{equation}
-Having defined the treatment assignment rule, we can now generalise
-assumption \ref{Sass:SUTVAl}:
+Having defined the treatment assignment rule, we can now provide a
+more general version of assumption \asref{Sass:SUTVAl}{A}:
 
 %\addtocounter{assumption}{-1}
 \begin{assumption}{4}{B}
@@ -655,20 +700,25 @@ fulfilling the treatment assignment rule $\mathbb{T}$.
 
 \begin{proposition}
 \label{Pass:ATTnonP}
-Under assumptions \ref{Sass:PT} to \asref{Sass:SUTVAlM}{B}, the ATT and ATC can be 
-consistently estimated by least squares when controlling, parametrically or
-semi-parametrically, for $R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$.
+Under assumptions \ref{Sass:PT} to \ref{Sass:SUTVAs} and
+\asref{Sass:SUTVAlM}{B}, the ATT and ATC can be consistently estimated
+by least squares when controlling, parametrically or
+semi-parametrically, for $R(i,t)=\mathbf{1}_{\mathbf{x}\in
+  \mathbb{T}}$. 
 \end{proposition}
 
+Now, \emph{mutatis mutandis}, we can go about generating our estimands of
+interest, replacing $R(i,t)=\mathbf{1}_{X_i\leq d}$ with
+$R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$
 
 
 \subsection{Semi-Parametric Estimation of Treatment Effects}
 
 
 \section{Conclusion}
-Echoing \citet{Bertrandetal2004}, ``Differences-in-Differences (DD) estimation has 
-become an increasingly popular way to estimate causal relationships''.  It is 
-important to consider the assumptions underlying these estimators.  
+Echoing \citet{Bertrandetal2004}, ``Differences-in-Differences (DD) estimation 
+has become an increasingly popular way to estimate causal relationships''.  
+It is important to consider the assumptions underlying these estimators.  
 In this paper we examine how DD estimates perform when the stable unit treatment 
 value assumption does not hold locally.  Such a situation may be common in estimates 
 of the causal effect of policy where compliance is imperfect.  If policies entail a 
@@ -700,7 +750,10 @@ model $Y(i,t)=\mu+\tau D(i,1) + \gamma R(i,1) + \delta t + \alpha D(i,t) +
 $R(i,t)$ to form $\tilde{y}(i,t)$.  Then appealing to SUTVA between $i$ such 
 that $D(i,1)=1$ and $j$, (assumption 3), and appealing to assumption 1, we have 
 that least squares estimation of $\tilde{y}(i,t)$ on a constant $D(i,1)$,
-$D(i,t)$ and $t$ gives $E(\hat\alpha)=\alpha=ATT$.
+$D(i,t)$ and $t$ (ie concentrated sum of squares) gives
+$E(\hat\alpha)=\alpha=ATT$.  \textcolor{red}{Note, could show this
+  last equality, especially if concentrating out all, in line with
+  Hansen 2000 ECTA.}
 
 Now, from the above model consider concentrating out $D(i,1)$ and $D(i,t)$
 to form \emph{\"{y}}$(i,t)$.  Then appealing to SUTVA between $i$ such 
@@ -730,3 +783,37 @@ $R(i,t)$ and $t$ gives $E(\hat\beta)=\beta=ATC$. $\qed$
 
 \end{spacing}
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Let's start by considering the estimation of (\ref{Seqn:cDD}), however completely
+ignoring the effect of spillovers $R(i,t)$.  Thus, we re-write (\ref{Seqn:cDD}) as:
+\[
+Y(i,t)=\mu+\tau D(i,1) + \gamma R(i,1) + \delta t + \alpha D(i,t) + \nu(i,t).
+\]
+
+where from (\ref{Seqn:cDD}), $\nu(i,t)=R(i,t)+\varepsilon(i,t)$.
+
+If we were to estimate $\hat\beta$, then $E[\hat\beta]=\beta+
+\frac{Cov[R(i,t),D(i,t)]}{Var[D(i,t)]}+
+\frac{Cov[\varepsilon(i,t),D(i,t)]}{Var[D(i,t)]}$
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
