@@ -105,11 +105,11 @@ into non-treatment clusters---at least locally.
 
 Such a situation is in clear violation of the SUTVA's requirement that the treatment
 status of any one unit must not affect the outcomes of any other unit.  In this 
-paper we propose a methodology to deal with such spillover effects.  We
+paper I propose a methodology to deal with such spillover effects.  I
 discuss how to test for local spillovers, and if such spillovers exist, how to 
 estimate unbiased treatment effects.  It is shown that this estimation requires
 a weaker condition than SUTVA: namely that SUTVA holds between \emph{some} units, 
-as determined by their distance from the treatment cluster.  We show how to 
+as determined by their distance from the treatment cluster.  I show how to 
 estimate treatment effects both parametrically and semi-parametrically, and then
 propose a method to generalise the proposed estimator to a higher dimensional 
 case where spillovers may depend in a flexible way on an arbitrary number of 
@@ -131,7 +131,7 @@ program may have an economic effect on nearby markets, but where this
 effect disipates as distance to treatment increases.
 
 Turning to empirics, this methodology is illustrated with two examples.
-We examine how spillovers of reforms across municipal boundaries may 
+I examine how spillovers of reforms across municipal boundaries may 
 contaminate `traditional' difference-in-differences (DD) estimators.  This is 
 applied to two contraceptive reforms, where individuals from contiguous or nearby 
 areas can travel to a treatment region to access the reform.  It is shown that 
@@ -386,7 +386,7 @@ semi-parametrically, for $R(i,t)=\mathbf{1}_{X_i\leq d}$.
 \end{proposition}
 
 
-\subsection{Estimation of Treatment and Spillover Effects}
+\subsection{Estimating the Treatment Effect in the Presence of Spillovers}
 From proposition \ref{Pass:ATT}, we can consistently estimate $\alpha$
 and $\beta$, our estimands of interest, with information on treatment
 status, and close to treatment status, along with outcomes $Y(i,t)$ at
@@ -447,6 +447,75 @@ know that $d<Kc$, implying that there are at least some units for whom spillover
 do not occurr.  From (\ref{Seqn:Runpack}) and the preceding logic, this suggests
 that $d$ can be recovered following the iterative procedure laid out below.
 
+If we start by estimating a typical DD specification like (\ref{Seqn:cDDconc}),
+our estimated treatment effect, which we now denote $\hat\alpha^0$ is:
+\begin{equation}
+\nonumber
+\begin{split}
+\mathbb{E}[\hat\alpha^0]=\alpha + \beta\beta_1\Bias{D(i,t)}{R^1(i,t)}
+                                + \beta\beta_2\Bias{D(i,t)}{R^2(i,t)}
+                                + \\ \ldots
+                                + \beta\beta_K\Bias{D(i,t)}{R^K(i,t)}.
+\end{split}
+\end{equation}
+If spillovers exist below some distance $d$, then 
+$\Cov[D(i,t),R^j(i,t)]>0 \ \ \forall \ \ jc<d$, given that $D(i,t)$---the treatment
+status in a treated municipality---affects the close to treated status in nearby 
+areas. If this is the case, and if 
+spillovers work in the same direction as treatment, then $|\mathbb{E}[\hat\alpha^0]|
+<|\alpha|$, implying that the estimated treatment effect will be attenuated by 
+treatment spillover to the control group.  
+
+We can then re-estimate (\ref{Seqn:cDDconc}), however now \emph{also} condition
+out $R^1(i,t)$ prior to estimating $\alpha$.  Our resulting estimate, $\hat\alpha^1$,
+will have the expectation:
+\begin{equation}
+\nonumber
+\begin{split}
+\mathbb{E}[\hat\alpha^1]=\alpha + \beta\beta_2\Bias{D(i,t)}{R^2(i,t)}
+                                + \ldots
+                                + \beta\beta_K\Bias{D(i,t)}{R^K(i,t)}.
+\end{split}
+\end{equation}
+Once again, if spillovers exist and are of the same sign as treatment, then the
+estimate $\hat\alpha^1$ will be attenuated, but not as badly as $\hat\alpha^0$ given
+that we now partially correct for spillovers up to a distance of $c$.  In this case:
+$|\mathbb{E}[\hat\alpha^0]|<|\mathbb{E}[\hat\alpha^1]|<|\alpha|$.  If, on the other
+hand, spillovers do not exist, then we will have that $|\mathbb{E}[\hat\alpha^0]|=
+|\mathbb{E}[\hat\alpha^1]|=|\alpha|$.  This leads to the following hypothesis test:
+\[
+H_0: \hat\alpha^0=\hat\alpha^1 \hspace{1cm}
+H_1: \hat\alpha^0\neq\hat\alpha^1.
+\]
+If we reject $H_0$ in favour of the alternative, this suggests that partially 
+correcting for spillovers affects the estimated coefficient $\alpha$, implying that
+spillovers occurr at least up to distance $c$, and that further tests are required.  
+
+Rejection of the null suggests that another iteration should be performed, this time
+removing $R^1(i,t)$ and $R^2(i,t)$ from the error term $\upsilon(i,t)$ in 
+(\ref{Seqn:cDDconc}), and the corresponding 
+parameter $\alpha^2$ be estimated.  If spillovers do occur at least up to distance 
+$2c$, we expect that $|\mathbb{E}[\hat\alpha^0]|<|\mathbb{E}[\hat\alpha^1]|<
+|\mathbb{E}[\hat\alpha^2]|<|\alpha|$, however if spillovers only occur up to distance
+$c$, we will have $|\mathbb{E}[\hat\alpha^0]|<|\mathbb{E}[\hat\alpha^1]|=
+|\mathbb{E}[\hat\alpha^2]|=|\alpha|$.  This leads to a new hypothesis test:
+\[
+H_0: \hat\alpha^1=\hat\alpha^2 \hspace{1cm}
+H_1: \hat\alpha^1\neq\hat\alpha^2,
+\]
+where rejection of the null implies that spillovers occur at least up to distance
+$2c$, while failure to reject the null suggests that spillovers only occur up to 
+distance $c$.
+
+This process should be followed iteratively up until the point that the marginal 
+estimate $\hat\alpha^{j+1}$ is equal to the preceding estimate $\hat\alpha^{j}$.  At
+this point, we can conclude that units at a distance of at least $jc$ from the 
+nearest treatment unit are not affected by spillovers, and hence a consistent 
+estimate of $\alpha$ can be produced.  Finally, this leads to a conclusion regarding
+$d$ and the indicator function $R(i,t)=\mathbf{1}_{X_i\leq d}$.  When the controlling
+for distance to treatment no longer affects the estimate of the treatment effect
+$\alpha$, we can conclude that $d=jc$, and thus correctly identify 
+$R(i,t)=\mathbf{1}_{X_i\leq jc}$ in data.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -465,10 +534,7 @@ that $d$ can be recovered following the iterative procedure laid out below.
 %We follow \citet{PorterYu2014} in treating the cutoff point $d$ as a
 %nuisance parameter which must be estimated.
 
-
-\subsection{Semi-Parametric Estimation of a Treatment Effect}
-Robinson style back fit to get the coefficient on treatment (but not close).
-\citet{Imbens2004}
+\subsection{Estimation the Magnitude of Spillovers}
 
 %********************************************************************************
 \section{An Empirical Illustration: Spillovers and Contraceptive Reforms}
@@ -593,17 +659,18 @@ reform are discussed in \citet{Clarke2014}).
 
 As for the case of the Mexico abortion reform, a `traditional' DD specification
 is esimtaed, and compared with a spillover-robust DD estimator as proposed in
-section \ref{Sscn:estim}.  A generalised version of (\ref{Seqn:tDD}) is estimated
-(where full year and municipal fixed effects are added, and municipal linear 
-trends and time-varying controls are included), and compared to an identical
-varsion of the equation robust to spillovers between treatment and 
+section \ref{Sscn:estim}.  A generalised version of (\ref{Seqn:cDDconc}) is 
+estimated (where full year and municipal fixed effects are added, and municipal 
+linear trends and time-varying controls are included), and compared to an 
+identical varsion of the equation robust to spillovers between treatment and 
 close-to-treatment areas (\ref{Seqn:cDD}).  If the traditional DD approach 
 adequately captures the treatment, or in other words if SUTVA holds even locally,
 then we should see two things: firstly, our estimate of $\alpha$ from 
-(\ref{Seqn:tDD}) should not be significantly different to that from (\ref{Seqn:cDD}).
-Secondly, the coefficient on $R(i,t)$ should not be significantly different to
-zero.  Formally, if we cannot reject the null that $\beta=0$, this is evidence 
-against the need for spillover robust DD in this case.  
+(\ref{Seqn:cDDconc}) should not be significantly different to that from 
+(\ref{Seqn:cDD}). Secondly, the coefficient on $R(i,t)$ should not be 
+significantly different to zero.  Formally, if we cannot reject the null that 
+$\beta=0$, this is evidence against the need for spillover robust DD in this 
+case.
 
 Columns 4 to 6 of table \ref{Stab:headline} present estimates from the Chile
 reform.  In this case the variable $Y(i,t)$ represents the probability of giving
@@ -731,6 +798,9 @@ $R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$
 
 
 \subsection{Semi-Parametric Estimation of Treatment Effects}
+Robinson style back fit to get the coefficient on treatment (but not close).
+\citet{Imbens2004}
+
 
 
 \section{Conclusion}
