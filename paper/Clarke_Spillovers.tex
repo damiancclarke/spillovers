@@ -112,14 +112,14 @@ a weaker condition than SUTVA: namely that SUTVA holds between \emph{some} units
 as determined by their distance from the treatment cluster.  We show how to 
 estimate treatment effects both parametrically and semi-parametrically, and then
 propose a method to generalise the proposed estimator to a higher dimensional 
-case where spillovers may depend, parametrically or non-parametrically, on a number 
-of factors.
+case where spillovers may depend in a flexible way on an arbitrary number of 
+factors.
 
 It is shown that this methodology recovers unbiased treatment
 estimates under quite general violations of SUTVA.  While it is
 assumed that the distance of an individual to the nearest treatment
 cluster determines whether stable unit treatment type assumptions hold
-for that individual, `distance' is defined very generally.  It is
+for that individual, `distance' is defined very broadly.  It is
 envisioned that this will allow for phenomena such as information
 flowing from treated to untreated areas, or of untreated individuals
 violating their treatment status by travelling from untreated to
@@ -130,17 +130,17 @@ local general equilibrium-type spillovers, where a tightly applied
 program may have an economic effect on nearby markets, but where this
 effect disipates as distance to treatment increases.
 
-This methodology is then illustrated with a number of (large scale) empirical 
-examples.  We examine how spillovers of reforms across municipal boundaries may 
+Turning to empirics, this methodology is illustrated with two examples.
+We examine how spillovers of reforms across municipal boundaries may 
 contaminate `traditional' difference-in-differences (DD) estimators.  This is 
 applied to two contraceptive reforms, where individuals from contiguous or nearby 
 areas can travel to a treatment region to access the reform.  It is shown that 
-both the plausibly exogenous arrival of the morning after pill to certain 
-municipalities of Chile, and abortion to certain districts in Mexico results in 
-a reduction of births in the given area, and in close-by quasi-control areas.  
-As a result, the spillover-robust DD estimator propsed here flexibly captures 
-this effect, correcting for any (local) spillover bias which traditional DD
-fails to account for.
+both the arrival of the morning after pill to certain municipalities of Chile, 
+and abortion to certain districts in Mexico results in a reduction of births in 
+the given area, as well as in close-by quasi-control areas.  As a result, the 
+spillover-robust DD estimator propsed here flexibly captures this effect, 
+correcting for any (local) spillover bias that traditional DD fails to 
+identify.
 
 This paper joins recent literature which aims to loosen the strong strucure 
 imposed by the SUTVA.  Perhaps most notably, it is (in broad terms) an 
@@ -196,8 +196,8 @@ treatment effect:
 \begin{equation}
 \label{Seqn:DD}
 \begin{split}
-\alpha&=\{E[Y(i,1)|D(i,1)=1]-E[Y(i,1)|D(i,1)=0]\} \\
-      &-\{E[Y(i,0)|D(i,1)=1]-E[Y(i,0)|D(i,1)=0]\}.
+\alpha&=\{\mathbb{E}[Y(i,1)|D(i,1)=1]-\mathbb{E}[Y(i,1)|D(i,1)=0]\} \\
+      &-\{\mathbb{E}[Y(i,0)|D(i,1)=1]-\mathbb{E}[Y(i,0)|D(i,1)=0]\}.
 \end{split}
 \end{equation}
 
@@ -209,6 +209,7 @@ travelling or moving to treated areas, or where spillovers from treatment
 areas is diffused through general equilibrium processes.  Define $R(i,t)$ 
 where:
 \begin{equation}
+\nonumber
  R(i,t) =
   \begin{cases}
    1   & \text{if an individual lives close to, but not in, a treatment area} \\
@@ -233,22 +234,22 @@ P(R(i,1)=1|\nu(i,t))=P(R(i,1)=1) \ \forall\ t\in\{0,1\}.
 \end{equation}
 This requires that both treatment, and being close to treatment cannot depend 
 upon individual-specific time-variant components. To see this, write 
-(\ref{Seqn:COV2}), adding and subtracting $E[\eta(i)|D(i,1),
+(\ref{Seqn:COV2}), adding and subtracting $\mathbb{E}[\eta(i)|D(i,1),
 R(i,1)]$:
 \begin{equation}
 \label{Seqn:addsub}
-Y(i,t)=\delta(t) + \alpha D(i,t)+\beta R(i,t)+E[\eta(i)|D(i,1),R(i,1)]+\varepsilon(i,t)
+Y(i,t)=\delta(t) + \alpha D(i,t)+\beta R(i,t)+\mathbb{E}[\eta(i)|D(i,1),R(i,1)]+\varepsilon(i,t)
 \end{equation}
-where, following \citet{Abadie2005}, $\varepsilon(i,t)=\eta(i)-E[\eta(i)|D(i,1),R(i,1)]
+where, following \citet{Abadie2005}, $\varepsilon(i,t)=\eta(i)-\mathbb{E}[\eta(i)|D(i,1),R(i,1)]
 +\nu(i,t)$.  We can write $\delta(t)=\delta(0)+[\delta(1)-\delta(0)]t$, and write
-$E[\eta(i)|D(i,1),R(i,1)]$ as the sum of the expectation of the individual-specific 
-component $\eta(i)$ over treatment status and `close' status\footnote{$E[\eta(i)|
-D(i,1),R(i,1)]=E[\eta(i)|D(i,1)=0,R(i,1)=0]+(E[\eta(i)|D(i,1)=1,
-R(i,1)=0]-E[\eta(i)|D(i,1)=0,R(i,1)=0])\cdot D(i,1)+(E[\eta(i)|D(i,1)=0,R(i,1)=1]-
-E[\eta(i)|D(i,1)=0,R(i,1)=0])\cdot R(i,1)$.}.  Finally define $\mu$ as 
-$\mu=E[\eta(i)|D(i,1)=0,R(i,1)=0]+\delta_0$, $\tau$ as $\tau=E[\eta(i)|D(i,1)=1,R(i,1)
-=0]-E[\eta(i)|D(i,1)=0,R(i,1)=0]$, $\gamma$ as $\gamma=E[\eta(i)|D(i,1)=0,R(i,1)=1]-
-E[\eta(i)|D(i,1)=0,R(i,1)=0]$ and $\delta$ as $\delta=\delta(1)-\delta(0)$.  Then 
+$\mathbb{E}[\eta(i)|D(i,1),R(i,1)]$ as the sum of the expectation of the individual-specific 
+component $\eta(i)$ over treatment status and `close' status\footnote{$\mathbb{E}[\eta(i)|
+D(i,1),R(i,1)]=\mathbb{E}[\eta(i)|D(i,1)=0,R(i,1)=0]+(\mathbb{E}[\eta(i)|D(i,1)=1,
+R(i,1)=0]-\mathbb{E}[\eta(i)|D(i,1)=0,R(i,1)=0])\cdot D(i,1)+(\mathbb{E}[\eta(i)|D(i,1)=0,R(i,1)=1]-
+\mathbb{E}[\eta(i)|D(i,1)=0,R(i,1)=0])\cdot R(i,1)$.}.  Finally define $\mu$ as 
+$\mu=\mathbb{E}[\eta(i)|D(i,1)=0,R(i,1)=0]+\delta_0$, $\tau$ as $\tau=\mathbb{E}[\eta(i)|D(i,1)=1,R(i,1)
+=0]-\mathbb{E}[\eta(i)|D(i,1)=0,R(i,1)=0]$, $\gamma$ as $\gamma=\mathbb{E}[\eta(i)|D(i,1)=0,R(i,1)=1]-
+\mathbb{E}[\eta(i)|D(i,1)=0,R(i,1)=0]$ and $\delta$ as $\delta=\delta(1)-\delta(0)$.  Then 
 from the above and (\ref{Seqn:addsub})
 we have:
 \begin{equation}
@@ -261,25 +262,27 @@ and the double difference term $\alpha$.  However it also includes `close' analo
 $\gamma$ (an initial fixed effect), and $\beta$: the effect of being `close to' a 
 treatment area.
 
-From assumptions (\ref{Seqn:ID}) and (\ref{Seqn:ID2}) it holds that $E[(1,D(i,1),R(i,1),
+From assumptions (\ref{Seqn:ID}) and (\ref{Seqn:ID2}) it holds that $\mathbb{E}[(1,D(i,1),R(i,1),
 D(i,t),R(i,t))\cdot\varepsilon(i,t)]=0$, which implies that all parameters from
 (\ref{Seqn:cDD}) are consistently estimable by OLS.  Importantly, this includes
 consistent estimates of $\alpha$ and $\beta$: the effect of the program treatment 
 and spillover effects on outcome variable $Y(i,t)$.  Then, from (\ref{Seqn:cDD}),
 a our coefficients of interest $\alpha$ and $\beta$ are:
 \begin{equation}
+\nonumber
 \label{Seqn:DDa}
 \begin{split}
-\alpha&=\{E[Y(i,1)|D(i,1)=1,R(i,1)=0]-E[Y(i,1)|D(i,1)=0,R(i,1)=0]\} \\
-      &-\{E[Y(i,0)|D(i,1)=1,R(i,1)=0]-E[Y(i,0)|D(i,1)=0,R(i,1)=0]\}, 
+\alpha&=\{\mathbb{E}[Y(i,1)|D(i,1)=1,R(i,1)=0]-\mathbb{E}[Y(i,1)|D(i,1)=0,R(i,1)=0]\} \\
+      &-\{\mathbb{E}[Y(i,0)|D(i,1)=1,R(i,1)=0]-\mathbb{E}[Y(i,0)|D(i,1)=0,R(i,1)=0]\}, 
 \end{split}
 \end{equation}
 and 
 \begin{equation}
+\nonumber
 \label{Seqn:DDb}
 \begin{split}
-\beta&=\{E[Y(i,1)|D(i,1)=0,R(i,1)=1]-E[Y(i,1)|D(i,1)=0,R(i,1)=0]\} \\
-      &-\{E[Y(i,0)|D(i,1)=0,R(i,1)=1]-E[Y(i,0)|D(i,1)=0,R(i,1)=0]\}. 
+\beta&=\{\mathbb{E}[Y(i,1)|D(i,1)=0,R(i,1)=1]-\mathbb{E}[Y(i,1)|D(i,1)=0,R(i,1)=0]\} \\
+      &-\{\mathbb{E}[Y(i,0)|D(i,1)=0,R(i,1)=1]-\mathbb{E}[Y(i,0)|D(i,1)=0,R(i,1)=0]\}. 
 \end{split}
 \end{equation}
 where the sample estimate of each parameter is generated by a least squares
@@ -301,8 +304,8 @@ $Y^0(i,t)$ if the person were not to receive treatment.  Our ATT and ATC are
 thus:
 \begin{eqnarray}
 \label{Seqn:estim}
-ATT=E[Y^1(i,1)-Y^0(i,1)|D(i)=1]\  \\
-ATC=E[Y^1(i,1)-Y^0(i,1)|R(i)=1].
+ATT=\mathbb{E}[Y^1(i,1)-Y^0(i,1)|D(i)=1]\  \\
+ATC=\mathbb{E}[Y^1(i,1)-Y^0(i,1)|R(i)=1].
 \end{eqnarray}
 As is typical in the potential outcome literature, estimation is hindered by the
 reality that only one of $Y^1(i,t)$ or $Y^0(i,t)$ is observed for a given 
@@ -321,12 +324,12 @@ treatment \emph{and} local spillovers, this relies on:
 \begin{assumption}{1}{}
 \label{Sass:PT}
 \textbf{Parallel trends in treatment and control:} \\
-$E[Y^0(i,1)-Y^0(i,0)|D=1,R=0]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$,
+$\mathbb{E}[Y^0(i,1)-Y^0(i,0)|D=1,R=0]=\mathbb{E}[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$,
 \end{assumption}
 \begin{assumption}{2}{}
 \label{Sass:PTC}
 \textbf{Parallel trends in close and control:} \\
-$E[Y^0(i,1)-Y^0(i,0)|D=0,R=1]=E[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$.
+$\mathbb{E}[Y^0(i,1)-Y^0(i,0)|D=0,R=1]=\mathbb{E}[Y^0(i,1)-Y^0(i,0)|D=0,R=0]$.
 \end{assumption}
 
 Here, for notational simplicity, $D$ and $R$ are used instead of the more 
@@ -359,7 +362,8 @@ all units.  We allow SUTVA to be violated in a specific manner:
 For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
 violated due to observable spillovers $R(i,t)$, where 
 $R(i,t)=\mathbf{1}_{X_i\leq d}$, with the indicator function $\mathbf{1}$
-depending upon the covariate $X$ exceeding some fixed, but unknown scalar $d$.
+depending upon the covariate $X$ being less than some fixed, but unknown, 
+scalar $d$.
 \end{assumption}
 \vspace{-4mm}
 \noindent This restriction is quite general however.  It simply states that
@@ -412,22 +416,36 @@ ignoring the potential presence of spillovers, then we have that the
 expectation of $\hat\alpha$ is:
 \begin{eqnarray}
 \label{Seqn:alphaExp}
-E[\hat\alpha] &=& \alpha + \beta\Bias{D(i,t)}{R(i,t)}+\Bias{D(i,t)}{\varepsilon(i,t)} \nonumber \\ 
+\mathbb{E}[\hat\alpha] &=& \alpha + \beta\Bias{D(i,t)}{R(i,t)}+\Bias{D(i,t)}{\varepsilon(i,t)} \nonumber \\ 
               &=& \alpha + \beta\Bias{D(i,t)}{R(i,t)},
 \end{eqnarray}
 where the second line comes from assumption (\ref{Seqn:ID}).  So far we have
 attached no functional form to $R(i,t)$.  Define $R(i,t)$ as:
 \begin{equation}
-R(i,t) = \beta_1R^1(i,t)+\beta_2R^2(i,t)+ \cdots + \beta_JR^J(i,t)
+\label{Seqn:Runpack}
+R(i,t) = \beta_1R^1(i,t)+\beta_2R^2(i,t)+ \cdots + \beta_KR^K(i,t)
 \end{equation}  
 where:
 \begin{equation}
- R^j(i,t) =
+ R^k(i,t) =
   \begin{cases}
-   1   & \text{if\ \ } X_i\geq(j-1)c \text{\ \ and \ } X_i<jc \\
+   1   & \text{if\ \ } X_i\geq(k-1)\cdot c \text{\ \ and \ } X_i<k\cdot c \\
    0   & \text{otherwise} 
-  \end{cases}\ \ \ \ \ \forall j \in (1,2,\ldots,J)
+  \end{cases}\ \ \ \ \ \forall k \in (1,2,\ldots,K).
 \end{equation}
+In the above expression $c$ refers to a bandwidth type parameter, which partitions
+the continuous distance variable $X_i$ into groups of distance $c$.\footnote{So, if
+for example $X_i$ refers to physical distance to treatment and the minimum and 
+maximum distances are 0 and 100km respectively, $c$ could be set as 5km, resulting
+in 20 different indicators $R^k$, of which each individual $i$ in time $t$ can
+have at most one switched on.}
+
+From the above, we have partitioned $X_i$ into $K$ different groups.  However, we
+are still unable to say anything about the distance $d$ above which spillovers no 
+longer occurr.  From assumptions \ref{Sass:SUTVAs} and \ref{Sass:PTC}, we do however
+know that $d<Kc$, implying that there are at least some units for whom spillovers
+do not occurr.  From (\ref{Seqn:Runpack}) and the preceding logic, this suggests
+that $d$ can be recovered following the iterative procedure laid out below.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -505,9 +523,9 @@ request.
 
 Table \ref{Stab:headline} provides estimates of the effect of the reform on
 the total number of births by teenagers in treatment municipalities.  In 
-column 1 we estimate as specification similar to (\ref{Seqn:tDD}): the 
+column 1 we estimate as specification similar to (\ref{Seqn:cDDconc}): the 
 traditional DD estimate which does not account for spillovers.\footnote{Rather 
-than estimating (\ref{Seqn:tDD}) precisely as written, we estimate a more 
+than estimating (\ref{Seqn:cDDconc}) precisely as written, we estimate a more 
 flexible specification including time varying controls, full time and
 municipality fixed effects, and municipal trends.  The intution however is
 similar.}  This is then extended in columns 2 and 3 to account for spillovers
@@ -810,7 +828,7 @@ Y(i,t)=\mu+\tau D(i,1) + \gamma R(i,1) + \delta t + \alpha D(i,t) + \nu(i,t).
 
 where from (\ref{Seqn:cDD}), $\nu(i,t)=R(i,t)+\varepsilon(i,t)$.
 
-If we were to estimate $\hat\beta$, then $E[\hat\beta]=\beta+
+If we were to estimate $\hat\beta$, then $\mathbb{E}[\hat\beta]=\beta+
 \frac{Cov[R(i,t),D(i,t)]}{Var[D(i,t)]}+
 \frac{Cov[\varepsilon(i,t),D(i,t)]}{Var[D(i,t)]}$
 
