@@ -387,6 +387,7 @@ semi-parametrically, for $R(i,t)=\mathbf{1}_{X_i\leq d}$.
 
 
 \subsection{Estimating the Treatment Effect in the Presence of Spillovers}
+\label{Ssscn:TE}
 From proposition \ref{Pass:ATT}, we can consistently estimate $\alpha$
 and $\beta$, our estimands of interest, with information on treatment
 status, and close to treatment status, along with outcomes $Y(i,t)$ at
@@ -517,24 +518,36 @@ for distance to treatment no longer affects the estimate of the treatment effect
 $\alpha$, we can conclude that $d=kc$, and thus correctly identify 
 $R(i,t)=\mathbf{1}_{X_i\leq kc}$ in data.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-
-
-
 %We follow \citet{PorterYu2014} in treating the cutoff point $d$ as a
 %nuisance parameter which must be estimated.
 
 \subsection{Estimation the Magnitude of Spillovers}
+\label{Ssscn:SE}
+In section \ref{Ssscn:TE} we discuss the consistent estimation of $\alpha$, the
+effect of being in a treatment area.  The extension of this methodology to 
+consistently estimate $\beta$, the effect of being close to treatment, is 
+reasonably straightforward.  Once the scalar value $d$ has been determined, and
+with data $\{Y(i,t), D(i,t), X(i,t): i=1, \ldots, N, t=0, 1\}$ in hand, we can 
+use $d$ to correctly map $X(i,t)$ into $R(i,t)$. Given the
+above we can now estimate (\ref{Seqn:cDD}), and form consistent estimates $\hat\beta$ 
+and $\hat\alpha$ using OLS.
+
+The estimate $\hat\beta$ will be the average treated effect on the close to treated
+(ATC), and will be one summary value for all areas to which spillovers occur.  
+However, more information regarding the precise manner of propogation can be observed
+by re-parametrizing $R(i,t)$ as in (\ref{Seqn:Runpack}).  This suggests an 
+alternative spillover test, in the style of that proposed in section \ref{Ssscn:TE}.
+Rather than observing $\hat\alpha^j$ at each stage of the estimation process, 
+$\hat\beta^j$ can be directly observed.  If $\hat\beta_j\neq 0$, this suggests that
+the effect on the marginal close to treatment area is different to the effect in 
+the control area, providing additonal evidence in favour of spillovers.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %********************************************************************************
 \section{An Empirical Illustration: Spillovers and Contraceptive Reforms}
@@ -750,6 +763,12 @@ lines display the 90\% confidence interval for all estimates.
 
 \section{Extensions}
 \label{Sscn:extend}
+
+\subsection{Semi-Parametric Estimation of Treatment Effects}
+Robinson style back fit to get the coefficient on treatment (but not close).
+\citet{Imbens2004}.  Just Monte Carlo this.
+
+
 \subsection{Estimating with Multidimensional Spillovers}
 In order to allow for spillovers to depend upon a range of observable variables,
 we must generalise assumption \asref{Sass:SUTVAl}{A}.  In order to do this, the
@@ -795,12 +814,6 @@ semi-parametrically, for $R(i,t)=\mathbf{1}_{\mathbf{x}\in
 Now, \emph{mutatis mutandis}, we can go about generating our estimands of
 interest, replacing $R(i,t)=\mathbf{1}_{X_i\leq d}$ with
 $R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$
-
-
-\subsection{Semi-Parametric Estimation of Treatment Effects}
-Robinson style back fit to get the coefficient on treatment (but not close).
-\citet{Imbens2004}
-
 
 
 \section{Conclusion}
