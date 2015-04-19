@@ -459,7 +459,7 @@ our estimated treatment effect, which we now denote $\hat\alpha^0$ is:
 \end{split}
 \end{equation}
 If spillovers exist below some distance $d$, then 
-$\Cov[D(i,t),R^j(i,t)]>0 \ \ \forall \ \ jc<d$, given that $D(i,t)$---the treatment
+$\Cov[D(i,t),R^k(i,t)]>0 \ \ \forall \ \ kc<d$, given that $D(i,t)$---the treatment
 status in a treated municipality---affects the close to treated status in nearby 
 areas. If this is the case, and if 
 spillovers work in the same direction as treatment, then $|\mathbb{E}[\hat\alpha^0]|
@@ -508,14 +508,14 @@ $2c$, while failure to reject the null suggests that spillovers only occur up to
 distance $c$.
 
 This process should be followed iteratively up until the point that the marginal 
-estimate $\hat\alpha^{j+1}$ is equal to the preceding estimate $\hat\alpha^{j}$.  At
-this point, we can conclude that units at a distance of at least $jc$ from the 
+estimate $\hat\alpha^{k+1}$ is equal to the preceding estimate $\hat\alpha^{k}$.  At
+this point, we can conclude that units at a distance of at least $kc$ from the 
 nearest treatment unit are not affected by spillovers, and hence a consistent 
 estimate of $\alpha$ can be produced.  Finally, this leads to a conclusion regarding
 $d$ and the indicator function $R(i,t)=\mathbf{1}_{X_i\leq d}$.  When the controlling
 for distance to treatment no longer affects the estimate of the treatment effect
-$\alpha$, we can conclude that $d=jc$, and thus correctly identify 
-$R(i,t)=\mathbf{1}_{X_i\leq jc}$ in data.
+$\alpha$, we can conclude that $d=kc$, and thus correctly identify 
+$R(i,t)=\mathbf{1}_{X_i\leq kc}$ in data.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
