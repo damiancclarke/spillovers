@@ -82,7 +82,7 @@ parametrically and semi-parametrically---to two empirical examples.
 \hspace{8mm} \emph{JEL codes}: C13, C21, J13, R23. \\
 
 \newpage
-\begin{spacing}{1.1}
+\begin{spacing}{1.3}
 %********************************************************************************
 \section{Introduction}
 Natural experiments often rely on territorial borders to estimate treatment 
@@ -540,7 +540,56 @@ alternative spillover test, in the style of that proposed in section \ref{Ssscn:
 Rather than observing $\hat\alpha^j$ at each stage of the estimation process, 
 $\hat\beta^j$ can be directly observed.  If $\hat\beta_j\neq 0$, this suggests that
 the effect on the marginal close to treatment area is different to the effect in 
-the control area, providing additonal evidence in favour of spillovers.
+the (remaining) control area.  If spillovers are the estimand of interest, additional
+$R^j(i,t)$ controls can be added until the hypothesis: $H_0: \beta_j = 0$ cannot be
+rejected for the marginal parameter.
+
+\subsection{Estimating with Multidimensional Spillovers}
+In order to allow for spillovers to depend upon a range of observable variables,
+we must generalise assumption \asref{Sass:SUTVAl}{A}.  In order to do this, the
+following new terminology is introduced, following \citet{Zajonc2012}. An 
+assignment rule, $\delta$, maps units with covariates $\mathbf{X=x}$ to close
+assignment $r$:
+\[
+\delta: \mathcal{X} \rightarrow \{0,1\}.
+\]
+This leads to a close-to-treatment assignment set $\mathbb{T}$ defined as:
+\[
+\mathbb{T}\equiv \{ \mathbf{x}\in\mathcal{X}: \delta(\mathbf{x})=1 \}
+\]
+whose complement $\mathbb{T}^c$ is known as the control assignment
+set. Finally then, we can write the treatment assignment rule:
+\begin{equation}
+\delta(x)\equiv \mathbf{1}_{\mathbf{x}\in\mathbb{T}}.
+\end{equation}
+Having defined the treatment assignment rule, we can now provide a
+more general version of assumption \asref{Sass:SUTVAl}{A}:
+
+%\addtocounter{assumption}{-1}
+\begin{assumption}{4}{B}
+\label{Sass:SUTVAlM}
+\textbf{Violations of SUTVA are observably local:} \\ 
+For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
+violated due to observable spillovers $R(i,t)$, where 
+$R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$, with the indicator function 
+$\mathbf{1}$ now depending upon potentially multidimensional
+$\mathbf{X=x}$
+fulfilling the treatment assignment rule $\mathbb{T}$.
+\end{assumption}
+
+\begin{proposition}
+\label{Pass:ATTnonP}
+Under assumptions \ref{Sass:PT} to \ref{Sass:SUTVAs} and
+\asref{Sass:SUTVAlM}{B}, the ATT and ATC can be consistently estimated
+by least squares when controlling, parametrically or
+semi-parametrically, for $R(i,t)=\mathbf{1}_{\mathbf{x}\in
+  \mathbb{T}}$. 
+\end{proposition}
+
+Now, \emph{mutatis mutandis}, we can go about generating our estimands of
+interest, replacing $R(i,t)=\mathbf{1}_{X_i\leq d}$ with
+$R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -633,7 +682,7 @@ apparent that statistically significant effects remain at least up to areas
 between 10 and 20km from the nearest treatment, and negative point estimates
 only disappear when travelling greater than 30km away from treatment.
 
-\begin{figure}[htpb!]
+\begin{figure}[h!]
 \includegraphics[scale=0.8]{../results/Mexico/CloseEstimate1.eps}
 \caption{Treatment and close to treatment effects: 15-19 year olds Mexico}
 \label{SFig:MexClose}
@@ -706,7 +755,7 @@ these tests suggest that the effect of the reform is able to travel around 30km;
 reasonably similar to the effects of the Mexico abortion reform discussed in 
 the previous section.
 
-\begin{figure}[htpb!]
+\begin{figure}[h!]
 \includegraphics[scale=0.8]{../results/Chile/CloseEstimate1.eps}
 \caption{Treatment Effects: 15-19 year olds Chile}
 \label{Sfig:ChileAlpha}
@@ -746,7 +795,7 @@ however, the reform should have no effect on predetermined outcomes in municipal
 placebo tests from the Mexico City abortion reform.  Now, as well as having a 
 treatment estimate not significantly different from 0 (ie confidence intervals
 at $distance=0$), the same result should hold for close municipalities ($distance>0$).
-\begin{figure}[htpb!]
+\begin{figure}[h!]
 \includegraphics[scale=0.76]{../results/Mexico/ClosePlacebo1.eps}
 \caption{Treatment and Close, Placebo Tests: 15-19 year olds Mexico}
 \label{SFig:MexClose}
@@ -761,60 +810,12 @@ lines display the 90\% confidence interval for all estimates.
 \end{figure}
 
 
-\section{Extensions}
-\label{Sscn:extend}
+%\section{Extensions}
+%\label{Sscn:extend}
 
-\subsection{Semi-Parametric Estimation of Treatment Effects}
-Robinson style back fit to get the coefficient on treatment (but not close).
-\citet{Imbens2004}.  Just Monte Carlo this.
-
-
-\subsection{Estimating with Multidimensional Spillovers}
-In order to allow for spillovers to depend upon a range of observable variables,
-we must generalise assumption \asref{Sass:SUTVAl}{A}.  In order to do this, the
-following new terminology is introduced, following \citet{Zajonc2012}. An 
-assignment rule, $\delta$, maps units with covariates $\mathbf{X=x}$ to close
-assignment $r$:
-\[
-\delta: \mathcal{X} \rightarrow \{0,1\}.
-\]
-This leads to a treatment assignment set $\mathbb{T}$ defined as:
-\[
-\mathbb{T}\equiv \{ \mathbf{x}\in\mathcal{X}: \delta(\mathbf{x})=1 \}
-\]
-whose complement $\mathbb{T}^c$ is known as the control assignment
-set. Finally then, we can write the treatment assignment rule:
-\begin{equation}
-\delta(x)\equiv \mathbf{1}_{\mathbf{x}\in\mathbb{T}}.
-\end{equation}
-Having defined the treatment assignment rule, we can now provide a
-more general version of assumption \asref{Sass:SUTVAl}{A}:
-
-%\addtocounter{assumption}{-1}
-\begin{assumption}{4}{B}
-\label{Sass:SUTVAlM}
-\textbf{Violations of SUTVA are observably local:} \\ 
-For those individuals $i\notin J$ (ie for whom SUTVA does not hold), SUTVA is
-violated due to observable spillovers $R(i,t)$, where 
-$R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$, with the indicator function 
-$\mathbf{1}$ now depending upon potentially multidimensional
-$\mathbf{X=x}$
-fulfilling the treatment assignment rule $\mathbb{T}$.
-\end{assumption}
-
-\begin{proposition}
-\label{Pass:ATTnonP}
-Under assumptions \ref{Sass:PT} to \ref{Sass:SUTVAs} and
-\asref{Sass:SUTVAlM}{B}, the ATT and ATC can be consistently estimated
-by least squares when controlling, parametrically or
-semi-parametrically, for $R(i,t)=\mathbf{1}_{\mathbf{x}\in
-  \mathbb{T}}$. 
-\end{proposition}
-
-Now, \emph{mutatis mutandis}, we can go about generating our estimands of
-interest, replacing $R(i,t)=\mathbf{1}_{X_i\leq d}$ with
-$R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$
-
+%\subsection{Semi-Parametric Estimation of Treatment Effects}
+%Robinson style back fit to get the coefficient on treatment (but not close).
+%\citet{Imbens2004}.  Just Monte Carlo this.
 
 \section{Conclusion}
 Echoing \citet{Bertrandetal2004}, ``Differences-in-Differences (DD) estimation 
@@ -852,9 +853,11 @@ $R(i,t)$ to form $\tilde{y}(i,t)$.  Then appealing to SUTVA between $i$ such
 that $D(i,1)=1$ and $j$, (assumption 3), and appealing to assumption 1, we have 
 that least squares estimation of $\tilde{y}(i,t)$ on a constant $D(i,1)$,
 $D(i,t)$ and $t$ (ie concentrated sum of squares) gives
-$E(\hat\alpha)=\alpha=ATT$.  \textcolor{red}{Note, could show this
-  last equality, especially if concentrating out all, in line with
-  Hansen 2000 ECTA.}
+$E(\hat\alpha)=\alpha=ATT$.  
+
+%\textcolor{red}{Note, could show this
+%  last equality, especially if concentrating out all, in line with
+%  Hansen 2000 ECTA.}
 
 Now, from the above model consider concentrating out $D(i,1)$ and $D(i,t)$
 to form \emph{\"{y}}$(i,t)$.  Then appealing to SUTVA between $i$ such 
@@ -862,59 +865,25 @@ that $D(i,1)=0$ and $j$, (assumption 3), and appealing to assumption 2, we
 have that least squares estimation of \"{y}$(i,t)$ on a constant $R(i,1)$,
 $R(i,t)$ and $t$ gives $E(\hat\beta)=\beta=ATC$. $\qed$
 
-
+\clearpage
 
 \section{Appendix Figures}
 \label{Sscn:Agraphs}
 \begin{figure}[htpb!]
-\includegraphics[scale=0.8]{../results/Mexico/CloseEstimate2.eps}
+\includegraphics[scale=0.77]{../results/Mexico/CloseEstimate2.eps}
 \caption{Treatment and close to treatment effects: 20-24 year olds Mexico}
 \end{figure}
 \begin{figure}[htpb!]
-\includegraphics[scale=0.8]{../results/Mexico/CloseEstimate3.eps}
+\includegraphics[scale=0.77]{../results/Mexico/CloseEstimate3.eps}
 \caption{Treatment and close to treatment effects: 25-29 year olds Mexico}
 \end{figure}
 \begin{figure}[htpb!]
-\includegraphics[scale=0.8]{../results/Mexico/CloseEstimate4.eps}
+\includegraphics[scale=0.77]{../results/Mexico/CloseEstimate4.eps}
 \caption{Treatment and close to treatment effects: 30-39 year olds Mexico}
 \end{figure}
 
-\section{Appendix Tables}
-\input{./Appendix.tex}
+%\section{Appendix Tables}
+%\input{./Appendix.tex}
 
 \end{spacing}
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-Let's start by considering the estimation of (\ref{Seqn:cDD}), however completely
-ignoring the effect of spillovers $R(i,t)$.  Thus, we re-write (\ref{Seqn:cDD}) as:
-\[
-Y(i,t)=\mu+\tau D(i,1) + \gamma R(i,1) + \delta t + \alpha D(i,t) + \nu(i,t).
-\]
-
-where from (\ref{Seqn:cDD}), $\nu(i,t)=R(i,t)+\varepsilon(i,t)$.
-
-If we were to estimate $\hat\beta$, then $\mathbb{E}[\hat\beta]=\beta+
-\frac{Cov[R(i,t),D(i,t)]}{Var[D(i,t)]}+
-\frac{Cov[\varepsilon(i,t),D(i,t)]}{Var[D(i,t)]}$
-
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-
