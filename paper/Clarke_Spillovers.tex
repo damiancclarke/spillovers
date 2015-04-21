@@ -427,6 +427,7 @@ R(i,t) = \beta_1R^1(i,t)+\beta_2R^2(i,t)+ \cdots + \beta_KR^K(i,t)
 \end{equation}  
 where:
 \begin{equation}
+\label{Seqn:Rpar}
  R^k(i,t) =
   \begin{cases}
    1   & \text{if\ \ } X_i\geq(k-1)\cdot c \text{\ \ and \ } X_i<k\cdot c \\
@@ -487,8 +488,8 @@ $|\mathbb{E}[\hat\alpha^0]|<|\mathbb{E}[\hat\alpha^1]|<|\alpha|$.  If, on the ot
 hand, spillovers do not exist, then we will have that $|\mathbb{E}[\hat\alpha^0]|=
 |\mathbb{E}[\hat\alpha^1]|=|\alpha|$.  This leads to the following hypothesis test:
 \[
-H_0: \hat\alpha^0=\hat\alpha^1 \hspace{1cm}
-H_1: \hat\alpha^0\neq\hat\alpha^1.
+H_0: \alpha^0=\alpha^1 \hspace{1cm}
+H_1: \alpha^0\neq\alpha^1.
 \]
 If we reject $H_0$ in favour of the alternative, this suggests that partially 
 correcting for spillovers affects the estimated coefficient $\alpha$, implying that
@@ -503,8 +504,8 @@ $2c$, we expect that $|\mathbb{E}[\hat\alpha^0]|<|\mathbb{E}[\hat\alpha^1]|<
 $c$, we will have $|\mathbb{E}[\hat\alpha^0]|<|\mathbb{E}[\hat\alpha^1]|=
 |\mathbb{E}[\hat\alpha^2]|=|\alpha|$.  This leads to a new hypothesis test:
 \[
-H_0: \hat\alpha^1=\hat\alpha^2 \hspace{1cm}
-H_1: \hat\alpha^1\neq\hat\alpha^2,
+H_0: \alpha^1=\alpha^2 \hspace{1cm}
+H_1: \alpha^1\neq\alpha^2,
 \]
 where rejection of the null implies that spillovers occur at least up to distance
 $2c$, while failure to reject the null suggests that spillovers only occur up to 
@@ -599,23 +600,35 @@ this is no longer the case.  Additionally, as the dimensionality of $\mathbf{X}$
 rises, the number of search dimensions for spillovers also rises, leading to 
 curse of dimensionality type considerations in the estimation of $\alpha$.
 
+The particular functional form assigned to $R(i,t)$ will be context-specific,
+and ideally driven by economic theory.  As mode of example, below I consider the
+case where $R(i,t)=f(X_1,X_2)$ is a function of two variables, one binary and
+the other continuous.  Such a case would be appropriate for a situation in which
+spillovers depend upon distance to treatment and some indicator, such as exceeding
+some income threshold.  Consider the case where $X_1\in (0,1)$ is binary, and 
+$X_2$ continuous.  Then we can parametrise $R(i,t)$ as:
 \begin{eqnarray}
 R(i,t)&=&f(X_1,X_2) \nonumber \\
       &=&X_1\cdot[\beta_{0,1}X_2^1(i,t)+ \cdots + \beta_{0,K}X_2^K(i,t)] \nonumber \\
-      &+& (1-X_1)\cdot[\beta_{1,1}X^1(i,t)+ \cdots + \beta_{1,K}X^K(i,t)] \nonumber
+      &+& (1-X_1)\cdot[\beta_{1,1}X_2^1(i,t)+ \cdots + \beta_{1,K}X_2^K(i,t)]. \nonumber
 \end{eqnarray}
+where $X_2^k(i,t)$ is defined as per (\ref{Seqn:Rpar}(.  Estimation of $\alpha$ 
+can then proceed iteratively as in section \ref{Ssscn:TE}.  First a traditional 
+DD parameter is estimated ignoring the possiblity that spillovers exist, leading 
+to the proposed estimate $\hat\alpha^0$.  Then $X_1\cdot[\beta_{0,1}X_2^1(i,t)$ 
+and $(1-X_1)\cdot[\beta_{1,1}X^1(i,t)$ are included in the regression, leading to 
+an updated estimate $\hat\alpha^1$.  If the hypothesis $H_0: \alpha^0=\alpha^1$ 
+cannot be rejected this suggests that spillovers are not a relevant phenomenon 
+for either group, and the estimate of $\hat\alpha^0$ is accepted as the ATT.  
+Otherwise, an additional iteration is made until the inclusion of the marginal 
+$X_2^k(i,t)$ indicators for $X_1 \in (0,1)$ no longer affect the estimated effect 
+$\alpha^k$.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %********************************************************************************
 \section{An Empirical Illustration: Spillovers and Contraceptive Reforms}
-We consider two empirical examples to motivate spillover-robust DD estimation.
+We consider two empirical examples to motivate and demonstrate spillover-robust 
+DD estimation.
 We focus on two localised contraceptive reforms in different countries. The first
 is the legalisation of abortion in Mexico city in April of 2007, and the second
 the expansion of morning after pill availability in certain municipalities of 
@@ -666,12 +679,12 @@ request.
 
 Table \ref{Stab:headline} provides estimates of the effect of the reform on
 the total number of births by teenagers in treatment municipalities.  In 
-column 1 we estimate as specification similar to (\ref{Seqn:cDDconc}): the 
+column 1 we estimate a specification similar to (\ref{Seqn:cDDconc}): the 
 traditional DD estimate which does not account for spillovers.\footnote{Rather 
 than estimating (\ref{Seqn:cDDconc}) precisely as written, we estimate a more 
 flexible specification including time varying controls, full time and
 municipality fixed effects, and municipal trends.  The intution however is
-similar.}  This is then extended in columns 2 and 3 to account for spillovers
+unchanged.}  This is then extended in columns 2 and 3 to account for spillovers
 (if necessary).  Columns 2 and 3 present spillover-robust DD estimates, as 
 described in section \ref{Sscn:estim} and equation (\ref{Seqn:cDD}).  In the
 case that spillovers exist, and that these spillovers work in the same 
@@ -735,7 +748,7 @@ reform eventually resulted in morning after pill availability in approximately
 reform are discussed in \citet{Clarke2014}).
 
 As for the case of the Mexico abortion reform, a `traditional' DD specification
-is esimtaed, and compared with a spillover-robust DD estimator as proposed in
+is estimated, and compared with a spillover-robust DD estimator as proposed in
 section \ref{Sscn:estim}.  A generalised version of (\ref{Seqn:cDDconc}) is 
 estimated (where full year and municipal fixed effects are added, and municipal 
 linear trends and time-varying controls are included), and compared to an 
@@ -850,7 +863,7 @@ and the average effect on the `close to treated' can be estimated in a DD-type
 framework.  It is suggested that in the absence of this correction for local 
 violations of SUTVA that (if spillovers actually \emph{do} occur) the true 
 effect of the policy is likely to be attenuated.  Finally, using two empirical 
-examples from recent contraceptive policy expansions, it is shown that this---at
+examples from recent contraceptive policy expansions, it is shown that this is---at
 least in these cases---an important consideration for treatment effects, and
 effects on nearby neighbourhoods.
 
@@ -860,7 +873,7 @@ effects on nearby neighbourhoods.
 \newpage
 
 \appendix
-\section{Appendix Proofs}
+\section{Proof of Proposition a\ref{Pass:ATT}}
 \emph{Sketch of Proof of proposition \ref{Pass:ATT}}: Consider the regression 
 model $Y(i,t)=\mu+\tau D(i,1) + \gamma R(i,1) + \delta t + \alpha D(i,t) + 
 \beta R(i,t) + \varepsilon(i,t)$.  Now consider concentrating out $R(i,1)$, 
