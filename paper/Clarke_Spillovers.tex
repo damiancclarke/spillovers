@@ -76,8 +76,8 @@ where the stable unit treatment value assumption is violated locally. This is
 relevant for a wide variety of cases where spillovers may occur between quasi-%
 treatment and quasi-control areas in a (natural) experiment. A flexible 
 methodology is described to test for such spillovers, and to consistently 
-estimate treatment effects in their presence. This methodology is applied---both 
-parametrically and semi-parametrically---to two empirical examples.
+estimate treatment effects in their presence. This methodology is applied to two 
+empirical examples.
 \end{abstract}
 \hspace{8mm} \emph{JEL codes}: C13, C21, J13, R23. \\
 
@@ -107,10 +107,10 @@ Such a situation is in clear violation of the SUTVA's requirement that the treat
 status of any one unit must not affect the outcomes of any other unit.  In this 
 paper I propose a methodology to deal with such spillover effects.  I
 discuss how to test for local spillovers, and if such spillovers exist, how to 
-estimate unbiased treatment effects.  It is shown that this estimation requires
-a weaker condition than SUTVA: namely that SUTVA holds between \emph{some} units, 
-as determined by their distance from the treatment cluster.  I show how to 
-estimate treatment effects both parametrically and semi-parametrically, and then
+estimate unbiased treatment effects in their presence.  It is shown that this 
+estimation requires a weaker condition than SUTVA: namely that SUTVA holds between 
+\emph{some} units, as determined by their distance from the treatment cluster.  I 
+show how to estimate treatment and spillover effects, and then
 propose a method to generalise the proposed estimator to a higher dimensional 
 case where spillovers may depend in a flexible way on an arbitrary number of 
 factors.
@@ -374,24 +374,22 @@ an $X_i$ representing geographic distance, these derivations do not imply that
 this must be the case.  The `close' indicator $R(i,t)$ could depend on a range 
 of phenomena including euclidean space, ethnic distance, edges between
 nodes in a network, or, as we return to discuss in section
-\ref{Sscn:extend}, interactions between measures such as  these and
+\ref{Ssscn:multi}, interactions between measures such as  these and
 economic variables. 
-
-
 \begin{proposition}
 \label{Pass:ATT}
 Under assumptions \ref{Sass:PT} to \asref{Sass:SUTVAl}{A}, the ATT and ATC can be 
 consistently estimated by least squares when controlling, parametrically or
 semi-parametrically, for $R(i,t)=\mathbf{1}_{X_i\leq d}$.
 \end{proposition}
-
+\noindent In the following two subsections we return to these estimands in turn. 
 
 \subsection{Estimating the Treatment Effect in the Presence of Spillovers}
 \label{Ssscn:TE}
 From proposition \ref{Pass:ATT}, we can consistently estimate $\alpha$
 and $\beta$, our estimands of interest, with information on treatment
 status, and close to treatment status, along with outcomes $Y(i,t)$ at
-each point of time $t\in\{0,1\}$.  In a typical DD framework, we
+each point in time.  In a typical DD framework, we
 observe $Y(i,t)$ and $D(i,t)$, however, do not fully observe $R(i,t)$,
 an individual's close/non-close status.
 
@@ -420,8 +418,9 @@ expectation of $\hat\alpha$ is:
 \mathbb{E}[\hat\alpha] &=& \alpha + \beta\Bias{D(i,t)}{R(i,t)}+\Bias{D(i,t)}{\varepsilon(i,t)} \nonumber \\ 
               &=& \alpha + \beta\Bias{D(i,t)}{R(i,t)},
 \end{eqnarray}
-where the second line comes from assumption (\ref{Seqn:ID}).  So far we have
-attached no functional form to $R(i,t)$.  Define $R(i,t)$ as:
+where the second line comes from (\ref{Seqn:ID}), which implies that
+$E[\Cov(D(i,t),\varepsilon(i,t))]=0$.  So far we have attached no functional 
+form to $R(i,t)$.  Define $R(i,t)$ as:
 \begin{equation}
 \label{Seqn:Runpack}
 R(i,t) = \beta_1R^1(i,t)+\beta_2R^2(i,t)+ \cdots + \beta_KR^K(i,t)
@@ -443,10 +442,13 @@ have at most one switched on.}
 
 From the above, we have partitioned $X_i$ into $K$ different groups.  However, we
 are still unable to say anything about the distance $d$ above which spillovers no 
-longer occurr.  From assumptions \ref{Sass:SUTVAs} and \ref{Sass:PTC}, we do however
+longer occur.  From assumptions \ref{Sass:SUTVAs} and \ref{Sass:PTC}, we do however
 know that $d<Kc$, implying that there are at least some units for whom spillovers
-do not occurr.  From (\ref{Seqn:Runpack}) and the preceding logic, this suggests
-that $d$ can be recovered following the iterative procedure laid out below.
+do not occur.\footnote{This is an identifying assumption.  If all `non-treatment'
+units are affected by spillovers from the treatment area, a consistent treatment
+effect cannot be estimated using this methodology.}  From (\ref{Seqn:Runpack}) and 
+the preceding logic, this suggests that $d$ can be recovered following the iterative 
+procedure laid out below.
 
 If we start by estimating a typical DD specification like (\ref{Seqn:cDDconc}),
 our estimated treatment effect, which we now denote $\hat\alpha^0$ is:
@@ -490,7 +492,7 @@ H_1: \hat\alpha^0\neq\hat\alpha^1.
 \]
 If we reject $H_0$ in favour of the alternative, this suggests that partially 
 correcting for spillovers affects the estimated coefficient $\alpha$, implying that
-spillovers occurr at least up to distance $c$, and that further tests are required.  
+spillovers occur at least up to distance $c$, and that further tests are required.  
 
 Rejection of the null suggests that another iteration should be performed, this time
 removing $R^1(i,t)$ and $R^2(i,t)$ from the error term $\upsilon(i,t)$ in 
@@ -513,10 +515,10 @@ estimate $\hat\alpha^{k+1}$ is equal to the preceding estimate $\hat\alpha^{k}$.
 this point, we can conclude that units at a distance of at least $kc$ from the 
 nearest treatment unit are not affected by spillovers, and hence a consistent 
 estimate of $\alpha$ can be produced.  Finally, this leads to a conclusion regarding
-$d$ and the indicator function $R(i,t)=\mathbf{1}_{X_i\leq d}$.  When the controlling
-for distance to treatment no longer affects the estimate of the treatment effect
-$\alpha$, we can conclude that $d=kc$, and thus correctly identify 
-$R(i,t)=\mathbf{1}_{X_i\leq kc}$ in data.
+$d$ and the indicator function $R(i,t)=\mathbf{1}_{X_i\leq d}$.  When controlling
+for the marginal distance to treatment indicator no longer affects the estimate of 
+the treatment effect $\alpha^k$, we can conclude that $d=kc$, and thus correctly 
+identify $R(i,t)=\mathbf{1}_{X_i\leq kc}$ in data.
 
 %We follow \citet{PorterYu2014} in treating the cutoff point $d$ as a
 %nuisance parameter which must be estimated.
@@ -528,9 +530,9 @@ effect of being in a treatment area.  The extension of this methodology to
 consistently estimate $\beta$, the effect of being close to treatment, is 
 reasonably straightforward.  Once the scalar value $d$ has been determined, and
 with data $\{Y(i,t), D(i,t), X(i,t): i=1, \ldots, N, t=0, 1\}$ in hand, we can 
-use $d$ to correctly map $X(i,t)$ into $R(i,t)$. Given the
-above we can now estimate (\ref{Seqn:cDD}), and form consistent estimates $\hat\beta$ 
-and $\hat\alpha$ using OLS.
+use $d$ to map $X(i,t)$ into $R(i,t)$. Given the above we can now estimate 
+(\ref{Seqn:cDD}), and form consistent estimates $\hat\beta$ and $\hat\alpha$ using 
+OLS.
 
 The estimate $\hat\beta$ will be the average treated effect on the close to treated
 (ATC), and will be one summary value for all areas to which spillovers occur.  
@@ -540,11 +542,12 @@ alternative spillover test, in the style of that proposed in section \ref{Ssscn:
 Rather than observing $\hat\alpha^j$ at each stage of the estimation process, 
 $\hat\beta^j$ can be directly observed.  If $\hat\beta_j\neq 0$, this suggests that
 the effect on the marginal close to treatment area is different to the effect in 
-the (remaining) control area.  If spillovers are the estimand of interest, additional
-$R^j(i,t)$ controls can be added until the hypothesis: $H_0: \beta_j = 0$ cannot be
-rejected for the marginal parameter.
+the (remaining) control area.  If spillovers are the estimand of interest, 
+additional $R^j(i,t)$ controls can be added until the hypothesis: $H_0: \beta_j = 0$ 
+cannot be rejected for the marginal parameter.
 
 \subsection{Estimating with Multidimensional Spillovers}
+\label{Ssscn:multi}
 In order to allow for spillovers to depend upon a range of observable variables,
 we must generalise assumption \asref{Sass:SUTVAl}{A}.  In order to do this, the
 following new terminology is introduced, following \citet{Zajonc2012}. An 
@@ -588,7 +591,19 @@ semi-parametrically, for $R(i,t)=\mathbf{1}_{\mathbf{x}\in
 
 Now, \emph{mutatis mutandis}, we can go about generating our estimands of
 interest, replacing $R(i,t)=\mathbf{1}_{X_i\leq d}$ with
-$R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$
+$R(i,t)=\mathbf{1}_{\mathbf{x}\in \mathbb{T}}$.  The most compuationally
+demanding step in this estimation procedure is in forming a parametric
+version of $R(i,t)$.  In a unidimensional framework it is reasonably straightforward
+to form local linear bins for $R(i,t)$.  However, in the multidimensional framework
+this is no longer the case.  Additionally, as the dimensionality of $\mathbf{X}$
+rises, the number of search dimensions for spillovers also rises, leading to 
+curse of dimensionality type considerations in the estimation of $\alpha$.
+
+\begin{eqnarray}
+R(i,t)&=&f(X_1,X_2) \nonumber \\
+      &=&X_1\cdot[\beta_{0,1}X_2^1(i,t)+ \cdots + \beta_{0,K}X_2^K(i,t)] \nonumber \\
+      &+& (1-X_1)\cdot[\beta_{1,1}X^1(i,t)+ \cdots + \beta_{1,K}X^K(i,t)] \nonumber
+\end{eqnarray}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
