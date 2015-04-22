@@ -135,13 +135,13 @@ contaminate `traditional' difference-in-differences (DD) estimators.  This is
 applied to two contraceptive reforms, where individuals from contiguous or nearby 
 areas can travel to a treatment region to access the reform.  It is shown that 
 both the arrival of the morning after pill to certain municipalities of Chile, 
-and abortion to certain districts in Mexico results in a reduction of births in 
+and abortion to certain districts in Mexico, results in a reduction of births in 
 the given area, as well as in close-by quasi-control areas.  As a result, the 
 spillover-robust DD estimator propsed here flexibly captures this effect, 
 correcting for any (local) spillover bias that traditional DD fails to 
 identify.
 
-This paper joins recent literature which aims to loosen the strong strucure 
+This paper joins recent literature which aims to loosen the strong structure 
 imposed by the SUTVA.  Perhaps most notably, it is (in broad terms) an 
 application of \citeauthor{Manski2013}'s (2013) social interactions framework, 
 focusing on the case where spillovers are restricted to areas local to treatment 
@@ -261,12 +261,14 @@ and the double difference term $\alpha$.  However it also includes `close' analo
 $\gamma$ (an initial fixed effect), and $\beta$: the effect of being `close to' a 
 treatment area.
 
-From assumptions (\ref{Seqn:ID}) and (\ref{Seqn:ID2}) it holds that $\mathbb{E}[(1,D(i,1),R(i,1),
-D(i,t),R(i,t))\cdot\varepsilon(i,t)]=0$, which implies that all parameters from
-(\ref{Seqn:cDD}) are consistently estimable by OLS.  Importantly, this includes
-consistent estimates of $\alpha$ and $\beta$: the effect of the program treatment 
-and spillover effects on outcome variable $Y(i,t)$.  Then, from (\ref{Seqn:cDD}),
-a our coefficients of interest $\alpha$ and $\beta$ are:
+From the assumptions in (\ref{Seqn:ID}) and (\ref{Seqn:ID2}) it holds that 
+$\mathbb{E}[(1,D(i,1),R(i,1),D(i,t),$
+$R(i,t))\cdot\varepsilon(i,t)]=0$, which 
+implies that all parameters from (\ref{Seqn:cDD}) are consistently estimable 
+by OLS.  Importantly, this includes consistent estimates of $\alpha$ and 
+$\beta$: the effect of the program treatment and spillover effects on 
+outcome variable $Y(i,t)$.  Then, from (\ref{Seqn:cDD}), a our coefficients 
+of interest $\alpha$ and $\beta$ are:
 \begin{equation}
 \nonumber
 \label{Seqn:DDa}
@@ -381,7 +383,7 @@ Under assumptions \ref{Sass:PT} to \asref{Sass:SUTVAl}{A}, the ATT and ATC can b
 consistently estimated by least squares when controlling, parametrically or
 semi-parametrically, for $R(i,t)=\mathbf{1}_{X_i\leq d}$.
 \end{proposition}
-\noindent In the following two subsections we return to these estimands in turn. 
+\noindent In the following two subsections we examine these estimands in turn. 
 
 \subsection{Estimating the Treatment Effect in the Presence of Spillovers}
 \label{Ssscn:TE}
@@ -442,7 +444,7 @@ have at most one switched on.}
 
 From the above, we have partitioned $X_i$ into $K$ different groups.  However, we
 are still unable to say anything about the distance $d$ above which spillovers no 
-longer occur.  From assumptions \ref{Sass:SUTVAs} and \ref{Sass:PTC}, we do however
+longer occur.  From assumptions \ref{Sass:PTC} and \ref{Sass:SUTVAs}, we do however
 know that $d<Kc$, implying that there are at least some units for whom spillovers
 do not occur.\footnote{This is an identifying assumption.  If all `non-treatment'
 units are affected by spillovers from the treatment area, a consistent treatment
@@ -600,7 +602,7 @@ rises, the number of search dimensions for spillovers also rises, leading to
 curse of dimensionality type considerations in the estimation of $\alpha$.
 
 The particular functional form assigned to $R(i,t)$ will be context-specific,
-and ideally driven by economic theory.  As mode of example, below I consider the
+and ideally driven by economic theory.  As mode of example, below we consider the
 case where $R(i,t)=f(X_1,X_2)$ is a function of two variables, one binary and
 the other continuous.  Such a case would be appropriate for a situation in which
 spillovers depend upon distance to treatment and some indicator, such as exceeding
@@ -611,11 +613,11 @@ R(i,t)&=&f(X_1,X_2) \nonumber \\
       &=&X_1\cdot[\beta_{0,1}X_2^1(i,t)+ \cdots + \beta_{0,K}X_2^K(i,t)] \nonumber \\
       &+& (1-X_1)\cdot[\beta_{1,1}X_2^1(i,t)+ \cdots + \beta_{1,K}X_2^K(i,t)]. \nonumber
 \end{eqnarray}
-where $X_2^k(i,t)$ is defined as per (\ref{Seqn:Rpar}(.  Estimation of $\alpha$ 
+where $X_2^k(i,t)$ is defined as per (\ref{Seqn:Rpar}).  Estimation of $\alpha$ 
 can then proceed iteratively as in section \ref{Ssscn:TE}.  First a traditional 
 DD parameter is estimated ignoring the possiblity that spillovers exist, leading 
-to the proposed estimate $\hat\alpha^0$.  Then $X_1\cdot[\beta_{0,1}X_2^1(i,t)$ 
-and $(1-X_1)\cdot[\beta_{1,1}X^1(i,t)$ are included in the regression, leading to 
+to the proposed estimate $\hat\alpha^0$.  Then $X_1\cdot[\beta_{0,1}X_2^1(i,t)]$ 
+and $(1-X_1)\cdot[\beta_{1,1}X^1(i,t)]$ are included in the regression, leading to 
 an updated estimate $\hat\alpha^1$.  If the hypothesis $H_0: \alpha^0=\alpha^1$ 
 cannot be rejected this suggests that spillovers are not a relevant phenomenon 
 for either group, and the estimate of $\hat\alpha^0$ is accepted as the ATT.  
@@ -853,7 +855,7 @@ value assumption does not hold locally.  Such a situation may be common in estim
 of the causal effect of policy where compliance is imperfect.  If policies entail a 
 benefit to recipients, and if recipients living `close to' treatment areas who are 
 themselves untreated can somehow cross regional boundaries to receive treatment, we 
-may be concerned, that locally at least, SUTVA is violated.
+may be concerned that, locally at least, SUTVA is violated.
 
 In this paper we derive a set of conditions by which DD estimates can produce 
 unbiased estimates even in the absence of SUTVA between all units.  It is shown
@@ -862,9 +864,9 @@ and the average effect on the `close to treated' can be estimated in a DD-type
 framework.  It is suggested that in the absence of this correction for local 
 violations of SUTVA that (if spillovers actually \emph{do} occur) the true 
 effect of the policy is likely to be attenuated.  Finally, using two empirical 
-examples from recent contraceptive policy expansions, it is shown that this is---at
-least in these cases---an important consideration for treatment effects, and
-effects on nearby neighbourhoods.
+examples from recent contraceptive policy expansions, it is shown that this is%
+---at least in these cases---an important consideration for treatment effects, 
+and effects on nearby neighbourhoods.
 
 
 \newpage
@@ -872,7 +874,7 @@ effects on nearby neighbourhoods.
 \newpage
 
 \appendix
-\section{Proof of Proposition a\ref{Pass:ATT}}
+\section{Proof of Proposition \ref{Pass:ATT}}
 \emph{Sketch of Proof of proposition \ref{Pass:ATT}}: Consider the regression 
 model $Y(i,t)=\mu+\tau D(i,1) + \gamma R(i,1) + \delta t + \alpha D(i,t) + 
 \beta R(i,t) + \varepsilon(i,t)$.  Now consider concentrating out $R(i,1)$, 
