@@ -20,6 +20,7 @@ query1 = ''
 query2 = ''
 query3 = ''
 query4 = ''
+
 names  = []
 codes  = []
 
@@ -35,7 +36,7 @@ for i,line in enumerate(areas):
         names.append(area)
         codes.append(str(code))
 
-        code = int(float(code)/1000)
+        Rcode = int(float(code)/1000)
         area = area.replace(' ', '+')
 
         if i<100:
@@ -47,22 +48,33 @@ for i,line in enumerate(areas):
         elif i<400:
             query4 += area +'Chile|'
 
+
 #-------------------------------------------------------------------------------
 #--- (2) Find distance between each comuna and each other Comuna
 #-------------------------------------------------------------------------------
 url1 = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='
 url2 = '&destinations='
 url3 = '&language=en-US&key='
-APIk = ''
+APIk = 'AIzaSyBZaiSKZ6rRbp-HYXL5UKCWM3Uq2hlLsr8'
 
-#for i,c in enumerate(names):
-for i,c in enumerate(['Chile Chico']):
-    print c + codes[i]
-    add1 = c.replace(' ','+')+'CHILE'
+print 'Origin;Destination;Distance;Distance (units);Duration;Duration (units)\n'
+
+for i,incom in enumerate(names):
+    lineint = incom + ';' + codes[i]
+
+    add1 = incom.replace(' ','+')+'CHILE'
     for query in [query1,query2,query3,query4]:
+        Qlist = query.split('|')
+
         result = urllib2.urlopen(url1+add1+url2+query+url3+APIk).read()
         result = json.loads(result)
-        for keys, values in result.items():
-            print(values)
 
-        #print result["destination_addresses"]
+
+        for i,outcom in enumerate(result["destination_addresses"]):
+            outN = Qlist[i].replace('+Chile','') 
+            distT = result['rows'][0]['elements'][i]['distance']['text']
+            duraT = result['rows'][0]['elements'][i]['duration']['text']
+            distN = str(result['rows'][0]['elements'][i]['distance']['value'])
+            duraN = str(result['rows'][0]['elements'][i]['duration']['value'])
+
+            print lineint+';'+outN+';'+distT+';'+distN+';'+duraT+';'+duraN+'\n' 
