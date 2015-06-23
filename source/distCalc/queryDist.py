@@ -11,6 +11,9 @@
 #
 #    https://developers.google.com/maps/documentation/distancematrix/
 
+import urllib2
+import json 
+
 areas = open('comunas.csv', 'r')
 
 query1 = ''
@@ -33,8 +36,6 @@ for i,line in enumerate(areas):
         codes.append(str(code))
 
         code = int(float(code)/1000)
-#        print 'area is %s and region code is %s' %(area, code)
-        
         area = area.replace(' ', '+')
 
         if i<100:
@@ -52,13 +53,16 @@ for i,line in enumerate(areas):
 url1 = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='
 url2 = '&destinations='
 url3 = '&language=en-US&key='
-APIk = 'xxxxxxxxxxxxxxxxxxxxxxxxx'
+APIk = ''
 
-for i,c in enumerate(names):
+#for i,c in enumerate(names):
+for i,c in enumerate(['Chile Chico']):
     print c + codes[i]
     add1 = c.replace(' ','+')+'CHILE'
-    print url1+add1+url2+query2+url3+APIk
+    for query in [query1,query2,query3,query4]:
+        result = urllib2.urlopen(url1+add1+url2+query+url3+APIk).read()
+        result = json.loads(result)
+        for keys, values in result.items():
+            print(values)
 
-
-
-
+        #print result["destination_addresses"]
