@@ -71,6 +71,9 @@ for i,incom in enumerate(names):
     lineint = incom + ';' + codes[i]
 
     add1 = incom.replace(' ','+')+'CHILE'
+    if add1 == 'COLCHANE+CHILE':
+        add1 = 'CARIQUIMA+CHILE'
+
     for query in [query1,query2,query3,query4]:
         Qlist = query.split('|')
 
