@@ -13,8 +13,14 @@
 
 import urllib2
 import json 
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
 
 areas = open('comunas.csv', 'r')
+res   = open('distances.csv', 'w')
 
 query1 = ''
 query2 = ''
@@ -57,7 +63,9 @@ url2 = '&destinations='
 url3 = '&language=en-US&key='
 APIk = 'AIzaSyBZaiSKZ6rRbp-HYXL5UKCWM3Uq2hlLsr8'
 
-print 'Origin;Destination;Distance;Distance (units);Duration;Duration (units)\n'
+title = 'Origin;Destination;Distance;Distance (units);Duration;Duration (units)\n'
+print title
+res.write(title)
 
 for i,incom in enumerate(names):
     lineint = incom + ';' + codes[i]
@@ -72,9 +80,24 @@ for i,incom in enumerate(names):
 
         for i,outcom in enumerate(result["destination_addresses"]):
             outN = Qlist[i].replace('+Chile','') 
-            distT = result['rows'][0]['elements'][i]['distance']['text']
-            duraT = result['rows'][0]['elements'][i]['duration']['text']
-            distN = str(result['rows'][0]['elements'][i]['distance']['value'])
-            duraN = str(result['rows'][0]['elements'][i]['duration']['value'])
+            outN = outN.replace('+',' ') 
 
-            print lineint+';'+outN+';'+distT+';'+distN+';'+duraT+';'+duraN+'\n' 
+            try:
+                distT = result['rows'][0]['elements'][i]['distance']['text']
+                distN = str(result['rows'][0]['elements'][i]['distance']['value'])
+            except:
+                distT = 'NA'
+                distN = 'NA'
+            try:
+                duraT = result['rows'][0]['elements'][i]['duration']['text']
+                duraN = str(result['rows'][0]['elements'][i]['duration']['value'])
+            except:
+                duraT = 'NA'
+                duraN = 'NA'
+
+            newline=lineint+';'+outN+';'+distT+';'+distN+';'+duraT+';'+duraN+'\n' 
+            print newline
+            res.write(newline)
+
+
+res.close()
