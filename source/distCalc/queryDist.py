@@ -20,41 +20,62 @@ sys.setdefaultencoding('utf8')
 
 
 areas = open('comunas.csv', 'r')
+pills = open('pillComunas.csv', 'r')
+
 res   = open('distances.csv', 'w')
 
 query1 = ''
 query2 = ''
 query3 = ''
 query4 = ''
+query = {'r1': '',
+         'r2': '',
+         'r3': '',
+         'r4': '',
+         'r5': '',
+         'r6': '',
+         'r7': '',
+         'r8': '',
+         'r9': '',
+         'r10': '',
+         'r11': '',
+         'r12': '',
+         'r13': '',
+         'r14': '',
+         'r15': ''
+}
+
 
 names  = []
 codes  = []
 
 #-------------------------------------------------------------------------------
-#--- (1) Generate search list (break int0 lists of 100 or less for API)
+#--- (1a) Generate full comuna list
 #-------------------------------------------------------------------------------
 for i,line in enumerate(areas):
     if i>0:
         line = line.replace('\n','')
-        area = line.split(',')[1]
-        code = line.split(',')[0]
+        area = line.split(',')[0]
+        code = line.split(',')[1]
 
         names.append(area)
         codes.append(str(code))
 
-        Rcode = int(float(code)/1000)
-        area = area.replace(' ', '+')
+#-------------------------------------------------------------------------------
+#--- (1b) Generate search list by region
+#-------------------------------------------------------------------------------
+for i,line in enumerate(pills):
+    if i>0:
+        line = line.replace('\n','')
 
-        if i<100:
-            query1 += area +'Chile|'
-        elif i<200:
-            query2 += area +'Chile|'
-        elif i<300:
-            query3 += area +'Chile|'
-        elif i<400:
-            query4 += area +'Chile|'
+        area = line.split(',')[1].replace(' ', '+')
+        code = line.split(',')[3]
+        regn = line.split(',')[4]
+        name = 'r'+regn
 
+        query[name] += area +'+Chile|' 
 
+"""
 #-------------------------------------------------------------------------------
 #--- (2) Find distance between each comuna and each other Comuna
 #-------------------------------------------------------------------------------
@@ -104,3 +125,4 @@ for i,incom in enumerate(names):
 
 
 res.close()
+"""
