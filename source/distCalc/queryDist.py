@@ -18,16 +18,17 @@ import sys
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
+nmin = 0
+nmax = 100
 
 areas = open('comunas.csv', 'r')
 pills = open('pillComunas.csv', 'r')
+if nmin==0:
+    res   = open('distances.csv', 'w')
+else:
+    res   = open('distances.csv', 'a')
 
-res   = open('distances.csv', 'w')
 
-query1 = ''
-query2 = ''
-query3 = ''
-query4 = ''
 query = {'r1': '',
          'r2': '',
          'r3': '',
@@ -44,8 +45,6 @@ query = {'r1': '',
          'r14': '',
          'r15': ''
 }
-
-
 names  = []
 codes  = []
 
@@ -75,54 +74,65 @@ for i,line in enumerate(pills):
 
         query[name] += area +'+Chile|' 
 
-"""
+print query['r10']
+
 #-------------------------------------------------------------------------------
 #--- (2) Find distance between each comuna and each other Comuna
 #-------------------------------------------------------------------------------
+Rsearch = [[], [1,15,2], [2,1,3], [3,2,4], [4,3,5], [5,4,13], [6,13,7], [7,6,8],
+           [8,7,9], [9,8,14], [10,14], [10,12], [12,10], [13,5], [14,9,10], [15,1]]
+nsearch = 0
+
 url1 = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='
 url2 = '&destinations='
 url3 = '&language=en-US&key='
 APIk = 'AIzaSyBZaiSKZ6rRbp-HYXL5UKCWM3Uq2hlLsr8'
 
-title = 'Origin;Destination;Distance;Distance (units);Duration;Duration (units)\n'
+title = 'Origin;Code;Destination;Distance;Dist (units);Duration;Dur (units)\n'
 print title
 res.write(title)
 
+
 for i,incom in enumerate(names):
     lineint = incom + ';' + codes[i]
+    Rcode = int(float(codes[i])/1000)
 
-    add1 = incom.replace(' ','+')+'CHILE'
+    add1 = incom.replace(' ','+')+'+CHILE'
     if add1 == 'COLCHANE+CHILE':
         add1 = 'CARIQUIMA+CHILE'
 
-    for query in [query1,query2,query3,query4]:
-        Qlist = query.split('|')
+    for region in Rsearch[Rcode]:
+        rname = 'r'+str(region)
+        Qlist = query[rname].split('|')[0:-1]
 
-        result = urllib2.urlopen(url1+add1+url2+query+url3+APIk).read()
-        result = json.loads(result)
+        for j in Qlist:
+            nsearch = nsearch + 1
 
-
-        for i,outcom in enumerate(result["destination_addresses"]):
-            outN = Qlist[i].replace('+Chile','') 
-            outN = outN.replace('+',' ') 
-
-            try:
-                distT = result['rows'][0]['elements'][i]['distance']['text']
-                distN = str(result['rows'][0]['elements'][i]['distance']['value'])
-            except:
-                distT = 'NA'
-                distN = 'NA'
-            try:
-                duraT = result['rows'][0]['elements'][i]['duration']['text']
-                duraN = str(result['rows'][0]['elements'][i]['duration']['value'])
-            except:
-                duraT = 'NA'
-                duraN = 'NA'
-
-            newline=lineint+';'+outN+';'+distT+';'+distN+';'+duraT+';'+duraN+'\n' 
-            print newline
-            res.write(newline)
+        if nsearch >= nmin and nsearch < nmax:
+            result = urllib2.urlopen(url1+add1+url2+query[rname]+url3+APIk).read()
+            result = json.loads(result)
 
 
+
+            for i,outcom in enumerate(result["destination_addresses"]):
+                outN = Qlist[i].replace('+Chile','') 
+                outN = outN.replace('+',' ') 
+
+                try:
+                    distT = result['rows'][0]['elements'][i]['distance']['text']
+                    distN = str(result['rows'][0]['elements'][i]['distance']['value'])
+                except:
+                    distT = 'NA'
+                    distN = 'NA'
+                try:
+                    duraT = result['rows'][0]['elements'][i]['duration']['text']
+                    duraN = str(result['rows'][0]['elements'][i]['duration']['value'])
+                except:
+                    duraT = 'NA'
+                    duraN = 'NA'
+
+                newline=lineint+';'+outN+';'+distT+';'+distN+';'+duraT+';'+duraN+'\n' 
+                print newline
+                res.write(newline)
 res.close()
-"""
+
