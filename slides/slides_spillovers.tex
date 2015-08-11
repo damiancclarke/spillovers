@@ -438,6 +438,20 @@ contraception in all of Latin America (Fraser, Lancet 2015)
 \input{./tables/AgeGroupN1.tex}
 \end{frame}
 
+\begin{frame}[label=empirB3]
+ \frametitle{Contraceptive Reforms in Latin America}
+In each case, na\"ive diff-in-diff fails to capture spillovers to `close' areas
+\vspace{8mm}
+\begin{itemize}
+\item ``Close'' areas are affected similarly (though in lower magnitude) by these reforms
+\item In both cases, diffusion of the reform appears to last for 20-30 km
+\item In Chile, correcting for spillovers corrects for an attenuation bias
+\item In Mexico, while significant effects are felt in close areas, the correction for
+these does not significantly effect estimates of ATT
+\item This can be explained by the number of close municipalities\ldots
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[label=MexMap]
 \begin{figure}
@@ -455,6 +469,21 @@ contraception in all of Latin America (Fraser, Lancet 2015)
 \hspace{-16mm}\includegraphics[scale=0.2]{./figures/Pill_l.eps}
 \end{center}
 \end{figure}
+\end{frame}
+
+\begin{frame}[label=robust]
+ \frametitle{Robustness to Alternative Specifications}
+I have reported a small number of specification and definitions of ``close''
+\vspace{4mm}
+\begin{itemize}
+\item However, results are generally robust to alternative models and defintions
+\begin{itemize}
+\item Estimating with comuna-level count data instead of an individual-level binary model
+\item Defining point-to-point distance by \hyperlink{distance}{\textcolor{blue}{travel over roads or travel time in vehicle}}
+\item Further results and robustness tests presented in paper, and Bentancor and Clarke (2014)
+\end{itemize}
+\end{itemize}
+
 \end{frame}
 
 
@@ -491,7 +520,6 @@ contraception in all of Latin America (Fraser, Lancet 2015)
 \end{frame}
 
 \begin{frame}[label=empirA1]
-%  \frametitle{Emergency Contraceptive Pill in Chile} 
 \begin{figure}
 \begin{center}
 \caption{Birth Figures and ILE Use (Mexico)}
@@ -501,6 +529,16 @@ contraception in all of Latin America (Fraser, Lancet 2015)
 \hyperlink{empirB}{\textcolor{blue}{Back}}
 \end{frame}
 
+
+\begin{frame}[label=distance]
+\begin{figure}
+\begin{center}
+\caption{Alternative Distance Measured from Repeated Calls to googlemaps}
+\includegraphics[scale=0.5]{./figures/mapDistance.png}
+\end{center}
+\end{figure}
+\hyperlink{robust}{\textcolor{blue}{Back}}
+\end{frame}
 
 \begin{frame}[label=GrossEtAl]
 \frametitle{Gross et al.\ (2014): EC in USA}
@@ -517,6 +555,7 @@ cost of abortion or pregnancy, but also stigma, opportunity cost, and psychic co
 \end{itemize}
 \hyperlink{empirA3}{\textcolor{blue}{Back}}
 \end{frame}
+
 
 \end{document}
 
