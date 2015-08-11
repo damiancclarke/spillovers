@@ -21,6 +21,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{setspace}
 \usepackage{textcomp}
+\usepackage{tcolorbox}
 \usepackage{wrapfig}
 \usepackage{multirow}
 \usepackage{caption}
@@ -166,7 +167,7 @@ where $i$ has been supressed for ease of exposition.
 
 %================================================================================
 \section{Estimation}
-\begin{frame}[label=estim]
+\begin{frame}[label=estim1]
   \frametitle{Estimation}
 In this paper I am interested in estimating the unbiased causal effects $\alpha$ 
 and $\beta$.  This is referred to as a ``spillover robust double differences
@@ -176,16 +177,25 @@ estimator''
 \item This allows for spillovers, without imposing that they must exist
 \item More importantly, if spillovers do exist, this corrects for potential 
 confounding effects of including ``close'' units in the control group
-\item 
+%\item 
 \end{itemize}
-
 \end{frame}
 
+\begin{frame}[label=estim2]
+  \frametitle{Estimation}
+In a Rubin (1974) causal framework, $Y^1(i,t)$ is the potential outcome for some 
+person $i$ at time $t$ if they were to receive treatment, and $Y^0(i,t)$ if the 
+person were not to receive treatment.
+\vspace{4mm}
+\begin{itemize}
+\item The fundamental challenge of inference is that only one of these is observed
+\item Inference then proceeds using expectations over groups
+\item Unbiasedness relies on parallel trend assumptions holding
+\end{itemize}
+\end{frame}
 
-
-\section{Empirical Application}
-\begin{frame}[label=empir]
-  \frametitle{Empirical Application}
+\begin{frame}[label=estim3]
+  \frametitle{Estimation}
 Hence, I define:
 \vspace{4mm}
 \begin{eqnarray}
@@ -195,29 +205,257 @@ ATT=E[Y^1(i,1)-Y^0(i,1)|D(i,1)=1]\  \\
 ATC=E[Y^1(i,1)-Y^0(i,1)|C(i,1)=1],
 \end{eqnarray}
 \vspace{4mm} \\
-These are the sample counterparts of $\alpha$ and $\beta$, the population 
-estimands of interest.
-\vspace{8mm} \\
+where $C(i,t)$ refers to close, and is simply a re-definition of $R(i,t)$:
+$C(i,t)=\mathbf{1}_{R(i,t)\neq 0}$
+\vspace{4mm} \\
 \begin{enumerate}
 \item[ATT] Average treatment effect on the treated
 \item[ATC] Average treatment effect on the close to treated
 \end{enumerate}
+These are the sample counterparts of $\alpha$ and $\beta$, the population 
+estimands of interest.
+
+\end{frame}
+
+
+
+\begin{frame}[label=estim4]
+  \frametitle{Estimation}
+\textbf{Unbiasedness} relies on a number of assumptions. \\
+\vspace{5mm}
+
+\begin{tcolorbox}[title =1. Parallel trends in treatment and control]
+$E[Y^0(1)-Y^0(0)|D(1)=1,C(1)=0]= \\
+E[Y^0(1)-Y^0(0)|D(1)=0,C(1)=0]$
+\end{tcolorbox}
+
+\begin{tcolorbox}[title =2. Parallel trends in close and control]
+$E[Y^0(1)-Y^0(0)|D(1)=0,C(1)=1]= \\
+E[Y^0(1)-Y^0(0)|D(1)=0,C(1)=0]$
+\end{tcolorbox}
+
+\end{frame}
+
+
+\begin{frame}[label=estim5]
+  \frametitle{Estimation}
+This is the fundamental diff-in-diff identifying assumption of parallel trends, 
+generalised to hold for treatment \emph{and} close to treatment status
+\vspace{4mm} \\
+\begin{itemize}
+\item However, note that we no longer need to make \emph{any} assumptions 
+regarding parallel trends between treatment and close to treatment units
+\item This allows for direct interactions of any form between those living in 
+treatment areas, and those living close by
+\item This loosens SUTVA, however, as a matter of course, some reduced form of 
+SUTVA must be assumed for causal estimates
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[label=estim6]
+  \frametitle{Estimation}
+\begin{tcolorbox}[title =3. SUTVA holds for some units]
+There is some subset of individuals $j\in J$ of the total population $i\in N$ 
+for whom potential outcomes ($Y_j^0, Y_j^1$) are independent of the treatment 
+status $D=\{0,1\}\ \forall_{i\neq j} \in N$.
+\end{tcolorbox}
+\vspace{4mm}
+This loosens SUTVA in the sense that here it must hold only between \emph{some}
+units.  Identification relies on there existing at least some subset of units 
+which are not affected by the treatment status of others.
+\end{frame}
+
+
+\begin{frame}[label=estim7]
+  \frametitle{Estimation}
+Finally, it is assumed that spillovers, or violations of SUTVA, do not occur 
+randomly in the population
+\vspace{4mm}
+\begin{tcolorbox}[title =4. Assignment to close to treatment depends on observable $X$]
+There exists an assignment rule $\delta\Big(X(i,t)\Big)=\{0,1\}$ which maps 
+individuals to close to treatment status $C(i,t)$, where $\delta\Big(X(i,t)\Big)=
+\mathbf{1}_{X(i,t)<d}$, $X(i,t)$ is an observed covariate, and $d$ is a fixed
+scalar cutoff. 
+\end{tcolorbox}
+\end{frame}
+
+
+\begin{frame}[label=estim8]
+  \frametitle{Estimation}
+This is quite demanding.  It requires that spillovers be based on an observable 
+and unidimensional factor (though of arbitrary functional form)
+\vspace{4mm}
+\begin{itemize}
+\item In some cases this may be acceptable (ie physical distance)
+\item In other cases, we will be interested in extending this to allow for 
+multidimensional determinants, or interactions between distance and individual
+characteristics
+\item A multidimensional (non-parametric) extension of this methodology is 
+provided in the paper
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=estim8]
+  \frametitle{Estimation}
+\begin{tcolorbox}[title =Proposition 1]
+Under assumptions 1 to 4, the ATT and ATC can be 
+consistently estimated by least squares when controlling, parametrically or
+non-parametrically, for $C(i,t)=\mathbf{1}_{X(i,t)\leq d}$.
+\end{tcolorbox}
+\end{frame}
+
+%================================================================================
+\section{Empirical Application}
+\begin{frame}[label=empir1]
+  \frametitle{Empirical Application}
+In order to examine this empirically, we need:
+\vspace{4mm}
+\begin{enumerate}
+\item A sharply defined policy reform over space and time
+\item A treatment group and control group seperated by geographic boundaries
+\item Members of the treatment group with sufficient incentives to violate their
+status, travelling to (or otherwise managing to access) the reform
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[label=empir2]
+  \frametitle{Empirical Application}
+As such, we focus on two recent contraceptive reforms:
+\vspace{6mm}
+\begin{enumerate}
+\item \textbf{Chile} 2008 reform: The emergency contraceptive pill
+\item \textbf{Mexico} April 26, 2007: Legal interruption of pregnancy (ILE)
+\end{enumerate}
+\vspace{6mm}
+These reforms work well: the costs of not having access (undesired pregnancy) are
+very high, and geographic boundaries (comunas, municipios) can be crossed easily
 \end{frame}
 
 
 \subsection{Empirical Application 1: Emergency Contraception in Chile}
 \begin{frame}[label=empirA]
   \frametitle{Empirical Application 1: Emergency Contraceptive Pill in Chile} 
+In 2008, following years of constitutional challenges, the decision of whether
+or not to prescribe the morning after pill was left in the hand of the mayor of
+each comuna in Chile
+\vspace{5mm}
+\begin{itemize}
+\item This was codified in the \emph{Normas Nacionales sobre Regulaci\'on de la 
+Fertilidad}
+\item I collect data on all births (DEIS), population (INE) and whether the 
+morning after pill was prescribed by comuna (Dides et al.)
+\item Further details and \hyperlink{ChileDesc}{\textcolor{blue}{descriptives}} provided 
+in Bentancor and Clarke (2014) and Casas Becerra (2008)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=empirA1]
+%  \frametitle{Emergency Contraceptive Pill in Chile} 
+\begin{figure}
+\begin{center}
+\caption{Trends in Teenage Pregnancy (Chile)}
+\includegraphics[scale=0.45]{./figures/Reform1519.eps}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}[label=empirA2]
+%  \frametitle{Emergency Contraceptive Pill in Chile}
+\input{./tables/spill1519Chile.tex}
+\end{frame}
+
+\begin{frame}[label=empirA3]
+  \frametitle{Emergency Contraceptive Pill in Chile}
+The effect sizes are quite large.  There are a few things to consider:
+\vspace{4mm}
+\begin{itemize}
+\item Roe vs Wade in USA:
+\begin{itemize}
+\item Bailey (2006) \hspace{4.4cm}-0.093 (0.043)
+\item Guldi (2008)  \hspace{4.4cm} -0.100 (0.054)
+\item Ananat and Hungerman (2012) \hspace{1.75cm} -0.043 (0.015)
+\end{itemize}
+\item Contraceptive Pill in USA:
+\begin{itemize}
+\item Bailey (2006) \hspace{4.4cm}-0.074 (0.057)
+\item Guldi (2008)  \hspace{4.4cm} -0.085 (0.041)
+\item Ananat and Hungerman (2012) \hspace{1.75cm} -0.088 (0.022)
+\end{itemize}
+\item Morning after pill in USA: 
+\begin{itemize}
+\item \hyperlink{GrossEtAl}{\textcolor{blue}{Gross et al (2014)}} \hspace{3.7cm} -0.020 (0.020)
+\end{itemize}
+\item 16 and Pregnant in USA: 
+\begin{itemize}
+\item Kearney and Levine (2014) \hspace{2.8cm} -0.057
+\end{itemize}
+\end{itemize}
 
 \end{frame}
+
+\begin{frame}[label=empirA4]
+%  \frametitle{Emergency Contraceptive Pill in Chile}
+\begin{figure}
+\begin{center}
+\caption{Placebo Test 1: Parallel Trends Between Treatment and Control}
+\includegraphics[scale=0.45]{./figures/Event1519treat.eps}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}[label=empirA5]
+%  \frametitle{Emergency Contraceptive Pill in Chile}
+\begin{figure}
+\begin{center}
+\caption{Placebo Test 1: Parallel Trends Between Close and Control}
+\includegraphics[scale=0.45]{./figures/Event1519close.eps}
+\end{center}
+\end{figure}
+\end{frame}
+
+
 
 
 \subsection{Empirical Application 2: Legal Interuption of Pregnancy in Mexico DF}
 \begin{frame}[label=empirB]
   \frametitle{Empirical Application 2: Legal Interuption of Pregnancy in Mexico DF}
+On April 26, 2007 the legislative assembly of Mexico DF voted to legalise legal 
+interruption of pregnancy (ILE) whenever requested by the woman up to 12 weeks of 
+gestation, reforming article 144 of the penal code of Mexico DF
+\vspace{5mm}
+\begin{itemize}
+\item This made Mexico DF one of the most liberal areas in terms of abortion
+contraception in all of Latin America (Fraser, Lancet 2015)
+\item I collect data on births (INEGI), and municipio controls
+\item Further \hyperlink{MexicoDesc}{\textcolor{blue}{descriptive statistics}}.
+\end{itemize}
 
 \end{frame}
 
+\begin{frame}[label=empirB2]
+%  \frametitle{Emergency Contraceptive Pill in Mexico}
+\input{./tables/AgeGroupN1.tex}
+\end{frame}
+
+
+\begin{frame}[label=MexMap]
+\begin{figure}
+\begin{center}
+\caption{Mexico Reform Areas}
+\hspace{-16mm}\includegraphics[scale=0.32]{./figures/MexReform.png}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}[label=ChileMap]
+\begin{figure}
+\begin{center}
+\caption{Chile Reform Areas}
+\hspace{-16mm}\includegraphics[scale=0.2]{./figures/Pill_l.eps}
+\end{center}
+\end{figure}
+\end{frame}
 
 
 %================================================================================
@@ -228,11 +466,57 @@ estimands of interest.
 \end{frame}
 
 
+\begin{frame}[label=future]
+  \frametitle{Conclusion and Future Work}
+\begin{itemize}
+\item Current work using a historical well documented contraceptive reform in USA
+\item Extension to a structural interpretation to motivate access to treatment
+\item Stata module \texttt{cdifdif} (and full source code for this project) 
+  available for download at \texttt{https://github.com/damiancclarke/spillovers/}
+\end{itemize}
+\end{frame}
 
 
+\begin{frame}
+{\Large Appendices}
+\end{frame}
+
+\begin{frame}[label=ChileDesc]
+\input{./tables/SummaryStats.tex}
+\hyperlink{empirA}{\textcolor{blue}{Back}}
+\end{frame}
+
+\begin{frame}[label=MexicoDesc]
+\input{./tables/MexSum.tex}
+\end{frame}
+
+\begin{frame}[label=empirA1]
+%  \frametitle{Emergency Contraceptive Pill in Chile} 
+\begin{figure}
+\begin{center}
+\caption{Birth Figures and ILE Use (Mexico)}
+\includegraphics[scale=0.7]{./figures/birthDescriptives.eps}
+\end{center}
+\end{figure}
+\hyperlink{empirB}{\textcolor{blue}{Back}}
+\end{frame}
 
 
-
+\begin{frame}[label=GrossEtAl]
+\frametitle{Gross et al.\ (2014): EC in USA}
+``This paper studies the effect of EC during a time period in which abortion was legal. 
+The effect of EC might be very different [were] abortion to be illegal 
+(Bailey, Guldi, \& Hershbein, 2013; Joyce, 2013).''
+\vspace{6mm}
+\begin{itemize}
+\item Gross et al.\ explicitly consider the outside cost of abortion $A$
+\item One may hyptohesise that $A_{Chile}>>A_{USA}$
+\item From Gross et al.\ ``These costs and benefits [$A$] reflect not only the financial 
+cost of abortion or pregnancy, but also stigma, opportunity cost, and psychic costs.''
+\vspace{7mm}
+\end{itemize}
+\hyperlink{empirA3}{\textcolor{blue}{Back}}
+\end{frame}
 
 \end{document}
 
