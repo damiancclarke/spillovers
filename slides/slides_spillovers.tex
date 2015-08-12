@@ -58,8 +58,8 @@
 \section{Introduction}
 \begin{frame}[label=int1]
   \frametitle{Introduction}
-Differences-in-differences (DD) estimates are frequently based on reforms which
-vary over space and time
+Differences-in-differences (DD) estimates are frequently based on externally
+defined events which vary over space and time
 \vspace{7mm}
 \begin{itemize}
 \item However, often, the space dimension depends upon porous boundaries 
@@ -87,8 +87,8 @@ recovered
 \item What's more, we can form an estimate for the effect of treatment on
 nearby areas
 \item It is shown that when a large number of individuals live ``close'' to 
-reform areas, correcting for spillovers has important implications on estimated 
-effects
+reform areas, correcting for spillovers has quantitatively important implications 
+on estimated effects
 \end{itemize}
 \end{frame}
 
@@ -135,6 +135,7 @@ although considerable variation by country
 \item In Chile, this figure is 55 in 1,000 and in Mexico 62 per 1,000
 \item High income countries often have rates of between 2 and 10 per 1,000 women
 \end{itemize}
+\vspace{3mm}
 \item Research suggests that teen childbearing has far reaching effects on women's
 economic outcomes including schooling, wages and labour market participation
 \end{itemize}
@@ -250,7 +251,7 @@ where $i$ has been supressed for ease of exposition.
 \begin{frame}[label=estim1]
   \frametitle{Estimation}
 In this paper I am interested in estimating the unbiased causal effects $\alpha$ 
-and $\beta$.  This is referred to as a ``spillover robust double differences
+and $\beta$.  I will refer to this as a ``spillover robust double differences
 estimator''
 \vspace{4mm}
 \begin{itemize}
@@ -401,9 +402,9 @@ as well as living within $((j-1)\cdot k, j\cdot k]$ of treatment
 \item Observe the coefficients on treatment ($\alpha^j$) and close to treatment
 ($\beta^j$)
 \item Test the null: $H_0:\ \alpha^j=\alpha^{j-1}$
-\item If the null is corrected, correcting for spillovers affects the estimated
-ATT, so repeat.  Else, the marginal spillover correction is no longer relevant,
-and $d=j\cdot k$
+\item If the null is rejected, correcting for spillovers affects the estimated
+ATT, so repeat steps 1-3.  Else, the marginal spillover correction is no longer 
+relevant, and $d=j\cdot k$
 \end{enumerate}
 \end{itemize}
 \end{frame}
@@ -411,8 +412,9 @@ and $d=j\cdot k$
 \begin{frame}[label=estim10]
   \frametitle{Estimation}
 In other words, we begin by estimating a normal DD regression, and subsequently
-remove individuals from the control group until their removal no longer effects
-the estimated treatment effects.
+remove potentially affected individuals from the control group, adding them to
+the `close' group, until their removal no longer effects the estimated treatment 
+effects.
 \vspace{6mm}
 \begin{itemize}
 \item We can estimate subsequent regressions using SUR
@@ -420,6 +422,15 @@ the estimated treatment effects.
 \item A more comprehensive exposition can be found in the paper, and an applied
 example in the slides which follow\ldots
 \end{itemize}  
+\end{frame}
+
+\begin{frame}[label=estim10]
+  \frametitle{Estimation}
+Estimation can then proceed as long as we have a representative sample:
+\vspace{4mm}
+\[
+\{Y(i,t), D(i,t), X(i,t): i=1, \ldots, N, t=0, 1\}.
+\]
 \end{frame}
 %================================================================================
 \begin{frame}
@@ -546,12 +557,13 @@ The effect sizes are quite large.  There are a few things to consider:
 On April 26, 2007 the legislative assembly of Mexico DF voted to legalise legal 
 interruption of pregnancy (ILE) whenever requested by the woman up to 12 weeks of 
 gestation, reforming article 144 of the penal code of Mexico DF
-\vspace{5mm}
+\vspace{9mm}
 \begin{itemize}
 \item This made Mexico DF one of the most liberal areas in terms of abortion
 contraception in all of Latin America (Fraser, Lancet 2015)
-\item I collect data on births (INEGI), and municipio controls
-\item Further \hyperlink{MexicoDesc}{\textcolor{blue}{descriptive statistics}}.
+\item I collect data on births (INEGI), time-varying controls, and point-to-point
+distance from each municipio to each area in D.F.
+\item \hyperlink{MexicoDesc}{\textcolor{blue}{Descriptive statistics}}.
 \end{itemize}
 
 \end{frame}
@@ -603,7 +615,7 @@ I have reported a small number of specifications and definitions of ``close''
 \begin{itemize}
 \item Estimating with comuna-level count data instead of an individual-level binary model
 \item Defining point-to-point distance by \hyperlink{distance}{\textcolor{blue}{travel over roads or travel time in vehicle}}
-\item Further results and robustness tests presented in paper, and Bentancor and Clarke (2014)
+\item Further results and robustness tests presented in the paper, and Bentancor and Clarke (2014)
 \end{itemize}
 \end{itemize}
 \end{frame}
