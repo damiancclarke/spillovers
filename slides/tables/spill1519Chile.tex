@@ -1,0 +1,33 @@
+\begin{table}[htpb!]
+\caption{Treatment Effects and Spillovers: Chile (15-19 year olds)}
+\vspace{-2mm}
+\label{Stab:spill1519}
+\begin{center}
+\scalebox{0.8}{
+\begin{tabular}{lccccc} \toprule
+&Pr(Birth)&Pr(Birth)&Pr(Birth)&Pr(Birth)&Pr(Birth)\\
+&(1)&(2)&(3)&(4)&(5)\\ \midrule
+&&&&& \\
+Treatment&$-$0.046$^{***}$&$-$0.058$^{***}$&$-$0.066$^{***}$&$-$0.073$^{***}$&$-$0.074$^{***}$\\
+&(0.011)&(0.013)&(0.014)&(0.014)&(0.015)\\
+Close 1&&$-$0.049$^{***}$&$-$0.056$^{***}$&$-$0.062$^{***}$&$-$0.062$^{***}$\\
+&&(0.015)&(0.014)&(0.014)&(0.014)\\
+Close 2&&&$-$0.040$^{*}$&$-$0.047$^{*}$&$-$0.048$^{**}$\\
+&&&(0.023)&(0.024)&(0.024)\\
+Close 3&&&&$-$0.038$^{*}$&$-$0.038$^{*}$\\
+&&&&(0.023)&(0.023)\\
+Close 4&&&&&$-$0.014\\
+&&&&&(0.023)\\
+& & & & & \\
+Mean&0.052&0.052&0.052&0.052&0.052\\
+Regions$\times$ Time&1,929&1,929&1,929&1,929&1,929\\ \midrule
+\multicolumn{6}{p{12.4cm}}{\begin{footnotesize}\textsc{Notes}:     
+Each column represents a separate difference-in-differences regression
+ including full time and municipal fixed effects and linear trends by 
+municipality. Standard errors are clustered at the level of the       
+geographic region of treatment (municipality). Close variables are    
+included in bins of 10km, so Close 1 refers to distances of [0,10)km, 
+Close 2 refers to [10,20)km, and so forth. Models are estimated using 
+a binary (logit) model for birth versus no birth. Coefficients are    
+expressed as log odds.\end{footnotesize}}\\
+\bottomrule\end{tabular}}\end{center}\end{table}

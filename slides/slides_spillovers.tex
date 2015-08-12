@@ -88,9 +88,42 @@
 
 \begin{frame}[label=teenPreg]
   \frametitle{Teenage Pregnancy in Latin America}
-
+Rates of teenage pregnancy in Latin America are very high by world standards, 
+although considerable variation by country
+\vspace{4mm}
+\begin{itemize}
+\item In Latin America, between the ages of 15-19, 67 in 1,000 women will give birth
+\item In Chile, this figure is 55 in 1,000 and in Mexico 62 per 1,000
+\item High income countries often have rates of between 2 and 10 per 1,000
+\end{itemize}
 \end{frame}
 
+\begin{frame}[label=cont]
+\begin{figure}
+\begin{center}
+\caption{Adolescent Pregnancy Rates in Latin America and the World}
+\includegraphics[scale=0.45]{./figures/Continents.pdf}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}[label=coun]
+\begin{figure}
+\begin{center}
+\caption{Adolescent Pregnancy Rates in Various Latin American Countries}
+\includegraphics[scale=0.45]{./figures/Countries.pdf}
+\end{center}
+\end{figure}
+\end{frame}
+
+\begin{frame}[label=teenPreg2]
+  \frametitle{Teenage Pregnancy}
+Teenage pregnancy has been shown to be 
+\vspace{4mm}
+\begin{itemize}
+\item 
+\end{itemize}
+\end{frame}
 
 
 %================================================================================
@@ -305,6 +338,10 @@ non-parametrically, for $C(i,t)=\mathbf{1}_{X(i,t)\leq d}$.
 \end{tcolorbox}
 \end{frame}
 
+\begin{frame}[label=estim9]
+  \frametitle{Estimation}
+\end{frame}
+
 %================================================================================
 \section{Empirical Application}
 \begin{frame}[label=empir1]
@@ -483,7 +520,6 @@ I have reported a small number of specification and definitions of ``close''
 \item Further results and robustness tests presented in paper, and Bentancor and Clarke (2014)
 \end{itemize}
 \end{itemize}
-
 \end{frame}
 
 
@@ -491,23 +527,38 @@ I have reported a small number of specification and definitions of ``close''
 \section{Conclusion and Future Work}
 \begin{frame}[label=concl]
   \frametitle{Conclusion and Future Work}
-
+I introduce a flexible methodology to test for spillovers, and loosen the 
+requirements of SUTVA in diff-in-diff studies
+\vspace{4mm}
+\begin{itemize}
+\item Rather than imposing that each unit can affect no other units, identification
+relies on having units sufficiently `far away' from the reform who are unaffected
+\item Here this is examined in terms of geographic distance, but this methodology
+can be arbitrarily applied to many structures: nodes in a network, ethnic distance, 
+multidimensional measures\ldots
+\item It is illustrated that this methodology can correct for attenuation in
+na\"ive diff-in-diff, as well as providing an alternative estimand of interest (ATC)
+\end{itemize}
 \end{frame}
 
 
 \begin{frame}[label=future]
   \frametitle{Conclusion and Future Work}
 \begin{itemize}
-\item Current work using a historical well documented contraceptive reform in USA
-\item Extension to a structural interpretation to motivate access to treatment
-\item Stata module \texttt{cdifdif} (and full source code for this project) 
-  available for download at \texttt{https://github.com/damiancclarke/spillovers/}
+\item Current work extends to using a historical well documented contraceptive
+ reform in USA
+\item Extension to a structural interpretation \emph{a-la} Heckman \& Vytlacil to
+ motivate access to treatment
+\item Stata module \texttt{cdifdif} (and full source code and data) 
+  available for download at \texttt{github.com/damiancclarke/spillovers/}
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}
-{\Large Appendices}
+\begin{center}
+\Large Appendices
+\end{center}
 \end{frame}
 
 \begin{frame}[label=ChileDesc]

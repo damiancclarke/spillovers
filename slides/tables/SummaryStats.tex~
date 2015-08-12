@@ -1,0 +1,60 @@
+\begin{table}[htpb!] \centering
+\caption{Summary Statistics} \label{TEENtab:SumStats}
+\scalebox{0.45}{
+\begin{tabular} {@{\extracolsep{5pt}}lp{3mm}ccc}\\ [-1.8ex]
+\hline\hline\\ [-1.8ex] &&No Pill&Pill&Total \\
+&&Available&Available& \\ \midrule 
+\textsc{Municipality Characteristics}&&&& \\
+&&&& \\
+Poverty &&16.4&17.0&16.6\\
+&&(7.47)&(7.56)&(7.49) \\
+Conservative &&0.286&0.267&0.281\\
+&&(0.452)&(0.443)&(0.45) \\
+Education Spending &&4,817&5,980&5,108\\
+&&(5,649)&(6,216)&(5,818) \\
+Health Spending &&1,866&2,788&2,096\\
+&&(2,635)&(3,381)&(2,867) \\
+Out of School &&4.07&3.98&4.05\\
+&&(3.16)&(3.06)&(3.13) \\
+Female Mayor &&0.120&0.134&0.123\\
+&&(0.325)&(0.341)&(0.329) \\
+Female Poverty &&60.5&62.0&60.8\\
+&&(10.64)&( 9.48)&(10.4) \\
+Pill Distance &&5.94&0.00&4.46\\
+&&(18.4)&( 0.0)&(16.1) \\
+&&&& \\
+\textsc{Individual Characteristics}&&&&\\
+&&&& \\
+Live Births &&0.054&0.053&0.054\\
+&&(0.226)&(0.224)&(0.226) \\
+Fetal Deaths &&0.0558&0.0513&0.0547\\
+&&(0.269)&(0.256)&(0.266) \\
+Birthweight &&3322.7&3334.3&3324.7\\
+&&     (540.0)&     (542.3)&     (540.4)\\
+Maternal education  &&       11.92&       12.03&       11.94\\
+&&     (2.967)&     (2.894)&     (2.955)\\
+Percent working     &&       0.295&       0.395&       0.312\\
+&&     (0.456)&     (0.489)&     (0.463)\\
+Married     &&       0.340&       0.309&       0.335\\
+&&     (0.474)&     (0.462)&     (0.472)\\
+Age at Birth      &&       27.05&       27.15&       27.07\\
+&&     (6.777)&     (6.790)&     (6.779)\\ \midrule
+N Comunas && 346 &280& 346 \\
+N Fetal Deaths &&9,999&3,064&13,063\\
+N Births &&1,214,088&391,212&1,605,300\\
+\hline \hline \\[-1.8ex]
+%\multicolumn{5}{p{12.0cm}}{\begin{footnotesize}\textsc{Notes:}
+%Group means are presented with standard deviations below in
+%parentheses.  Poverty refers to the \% of the municipality
+%below the poverty line, conservative is a binary variable
+%indicating if the mayor comes from a politically conservative
+%party
+%health and education spending are measured in thousands
+%of Chilean
+%pesos, and pill distance measures the distance (in km) to the
+%nearest municipality which reports prescribing emergency
+%contraceptives.  Pregnancies are reported as \% of all women
+%giving live birth, while fetal deaths are reported per live
+%birth.  All summary statistics are for the period 2006-2012.
+%\end{footnotesize}} 
+\normalsize\end{tabular}}\end{table}
