@@ -1,11 +1,15 @@
 function [betas,ses,RMSEmin,distopt] = cdifdif(y,X,dist,maxDist,varargin)
 %--------------------------------------------------------------------------------
-% PURPOSE: Tests up until marginal spillover is insignificant
+% PURPOSE: Implements Spillover Robust Diff-in-Diff Estimates (Clarke, 2017)
 %--------------------------------------------------------------------------------
-% INPUTS:  y    = N-by-1 dependent variable
-%          X    = N-by-k baseline independent variables
-%          dist = N-by-1 distance to treatment
-%          step = scalar distance step size
+% INPUTS:  y       = N-by-1 dependent variable
+%          X       = N-by-k baseline independent variables
+%          dist    = N-by-1 distance to treatment
+%          maxDist = Maximum spillover bandwidth to consider
+%          delta   = Step-size for bandwidth search (based on dist variable)
+%          tlimit  = Minimum t-stat to consider marginal spillover to be significant
+%          CVtype  = Type of Cross-Validation (must be either 'kfoldcv' or 'loocv')
+%          kfolds  = Number of folds for k-fold Cross-Validation
 %--------------------------------------------------------------------------------
 % OUTPUTS: Xdist   = N-by-(k+ndist) independent variables with new distance dummies
 %          ndist   = Number of distance variables
@@ -36,7 +40,7 @@ end
 [delta, tlimit, CVtype, kfolds] = optargs{:};
 
 %--------------------------------------------------------------------------------
-%--- (2) Iterate over potential models
+%--- (2) Iterate over potential models to find optimal
 %--------------------------------------------------------------------------------
 Xprop     = [ones(length(y),1),X];
 RMSEmin   = Inf;
@@ -49,6 +53,9 @@ iter = 1;
 for i = linspace(delta,maxDist,round(maxDist/delta))
   sprintf('Iteration %d, Distance %d',iter,i)
   [Xspill,nspill,mdist] = marginalDist(y,Xprop,dist,i,tlimit);
+  %NOTE: If nspill is 0, then the RMSE actually only needs to be estimated 1 time
+  %      This has been implemented in Stata code, but not here.
+
   if strcmpi(CVtype,'loocv')
     RMSE = loocv(y,Xspill);
   elseif strcmpi(CVtype,'kfoldcv')
@@ -76,9 +83,9 @@ end
 %--------------------------------------------------------------------------------
 %--- (3) Estimate Optimal Model
 %--------------------------------------------------------------------------------
-betas = (Xdist'*Xdist)\(Xdist'*y);
-uhat  = Xdist*betas-y;
-ses   = diag(sqrt((uhat'*uhat)/(N-length(betas))*inv(Xdist'*Xdist)));
+betas = (Xspill'*Xspill)\(Xspill'*y);
+uhat  = Xspill*betas-y;
+ses   = diag(sqrt((uhat'*uhat)/(length(y)-length(betas))*inv(Xspill'*Xspill)));
 
 [betas ses]
 
